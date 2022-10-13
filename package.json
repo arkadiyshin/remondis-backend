@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc -w",
     "start": "node dist/server.js",
@@ -20,10 +21,12 @@
   "homepage": "https://github.com/WildCodeSchool/2022-07-EN-Berlin-Remote1-Project3Backend#readme",
   "dependencies": {
     "@fastify/swagger": "^8.0.0",
+    "dotenv": "^16.0.3",
     "fastify": "^4.8.1",
     "xstate": "^4.33.6"
   },
   "devDependencies": {
+    "@types/node": "^18.8.5",
     "nodemon": "^2.0.20",
     "typescript": "^4.8.4"
   }
