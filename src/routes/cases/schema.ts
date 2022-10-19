@@ -1,16 +1,18 @@
 import type { FastifySchema } from 'fastify'
 import { FromSchema } from 'json-schema-to-ts'
 
-const CaseCoreSchema = {
+export const CaseCoreSchema = {
+    $id: 'caseCore',
     type: "object",
     properties: {
         client_phone: { type: "string" },
         client_email: { type: "string", format: "email" },
         address: { type: "string" }
     }
-}
+} as const
 
-const CaseExtendSchema = {
+export const CaseExtendSchema = {
+    $id: 'caseExtend',
     type: "object",
     properties: {
         client_first_name: { type: "string" },
@@ -22,9 +24,10 @@ const CaseExtendSchema = {
         quantity: { type: "integer" },
         way_to_property: { type: "string" }
     }
-}
+} as const
 
-const CaseFullSchema = {
+export const CaseFullSchema = {
+    $id: 'caseFull',
     type: "object",
     properties: {
         ...{ ...CaseCoreSchema.properties }, ...{ ...CaseExtendSchema.properties },
@@ -38,18 +41,20 @@ const CaseFullSchema = {
         manager_id: { type: "integer" },
         manager: { type: "string" },
     }
-}
+} as const
 
-const CaseItemCoreSchema = {
+export const CaseItemCoreSchema = {
+    $id: 'caseItemCore',
     type: "object",
     properties: {
         room: { type: "integr" },
         description: { type: "string" }
     },
     required: ['title', 'published', 'content', 'tags', 'deleted']
-}
+} as const
 
-const CaseItemFullSchema = {
+export const CaseItemFullSchema = {
+    $id: 'caseItemFull',
     type: "object",
     properties: {
         ...{ ...CaseItemCoreSchema.properties },
@@ -57,7 +62,7 @@ const CaseItemFullSchema = {
         photo_link: { type: "string" },
         quantity: { type: "integer" }
     }
-}
+} as const
 
 
 

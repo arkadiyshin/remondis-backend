@@ -9,6 +9,8 @@ import autoLoad from '@fastify/autoload'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import swagger, { FastifyDynamicSwaggerOptions } from '@fastify/swagger';
+import fastifySwaggerUi, { FastifySwaggerUiOptions } from '@fastify/swagger-ui';
 
 const app: FastifyInstance = Fastify({
     logger: true,
@@ -18,9 +20,9 @@ app.register(autoLoad, {
     dir: join(__dirname, 'plugins')
 })
 
-// app.register(autoLoad, {
-//     dir: join(__dirname, 'routes')
-// })
+app.register(autoLoad, {
+    dir: join(__dirname, 'routes')
+})
 
 
 // Run the server!
