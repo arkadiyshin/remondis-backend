@@ -2,17 +2,18 @@ import type { FastifySchema } from 'fastify'
 import { FromSchema } from 'json-schema-to-ts'
 
 export const CaseCoreSchema = {
-    $id: 'caseCore',
+    $id: "CaseCore",
     type: "object",
     properties: {
         client_phone: { type: "string" },
         client_email: { type: "string", format: "email" },
         address: { type: "string" }
-    }
+    }, 
+    required: ['client_email, address']
 } as const
 
 export const CaseExtendSchema = {
-    $id: 'caseExtend',
+    $id: "CaseExtend",
     type: "object",
     properties: {
         client_first_name: { type: "string" },
@@ -27,7 +28,7 @@ export const CaseExtendSchema = {
 } as const
 
 export const CaseFullSchema = {
-    $id: 'caseFull',
+    $id: "CaseFull",
     type: "object",
     properties: {
         ...{ ...CaseCoreSchema.properties }, ...{ ...CaseExtendSchema.properties },
@@ -44,17 +45,16 @@ export const CaseFullSchema = {
 } as const
 
 export const CaseItemCoreSchema = {
-    $id: 'caseItemCore',
+    $id: "CaseItemCore",
     type: "object",
     properties: {
-        room: { type: "integr" },
+        room: { type: "integer" },
         description: { type: "string" }
     },
-    required: ['title', 'published', 'content', 'tags', 'deleted']
 } as const
 
 export const CaseItemFullSchema = {
-    $id: 'caseItemFull',
+    $id: "CaseItemFull",
     type: "object",
     properties: {
         ...{ ...CaseItemCoreSchema.properties },
@@ -72,11 +72,11 @@ export const getCasesSchema: FastifySchema = {
     summary: "Get list of cases",
     description: "Get list of cases filtered by: data ceration, state, inspector, manager",
     tags: ['case'],
-    params: {
-        date_from: { type: "string", format: "date-time" },
-        date_to: { type: "string", format: "date-time" },
-        state_id: { type: "integer" },
-        state: { type: "string" },
+    querystring: {
+        date_from: { type: ["string", "null"], format: "date-time"},
+        date_to: { type: ["string", "null"], format: "date-time" },
+        state_id: { type: ["integer", "null"] },
+        state: { type: ["string", "null"] },
         inspector_id: { type: "integer" },
         inspector: { type: "string" },
         manager_id: { type: "integer" },
@@ -88,6 +88,7 @@ export const getCasesSchema: FastifySchema = {
             items: CaseFullSchema,
         },
     },
+    
 }
 
 export const getCaseSchema: FastifySchema = {

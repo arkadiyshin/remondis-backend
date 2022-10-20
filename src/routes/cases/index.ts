@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import {
     getCasesSchema,
-    getCaseSchema, 
+    getCaseSchema,
     postCaseSchema,
     updateCaseSchema,
     changeCaseSchema,
@@ -23,11 +23,11 @@ import {
 } from './handler.js'
 
 export default async (app: FastifyInstance) => {
-     app.addSchema(CaseCoreSchema);
-     app.addSchema(CaseExtendSchema);
-     app.addSchema(CaseFullSchema);
-    //app.addSchema(CaseItemCoreSchema);
-   // app.addSchema(CaseItemFullSchema);
+    app.addSchema(CaseCoreSchema);
+    app.addSchema(CaseExtendSchema);
+    app.addSchema(CaseFullSchema);
+    app.addSchema(CaseItemCoreSchema);
+    app.addSchema(CaseItemFullSchema);
 
     app.get('/', { schema: getCasesSchema }, getCasesHandler)
     app.get('/:postid', { schema: getCaseSchema }, getCaseHandler)
