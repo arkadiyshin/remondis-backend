@@ -30,8 +30,8 @@ export default async (app: FastifyInstance) => {
     app.addSchema(CaseItemFullSchema);
 
     app.get('/', { schema: getCasesSchema }, getCasesHandler)
-    app.get('/:postid', { schema: getCaseSchema }, getCaseHandler)
+    app.get('/:case_id', { schema: getCaseSchema }, getCaseHandler)
     app.post('/', { schema: postCaseSchema }, addCaseHandler)
-    app.put('/:postid', { schema: updateCaseSchema }, updateCaseHandler)
-    app.delete('/:postid', { schema: deleteCaseSchema }, deleteCaseHandler)
+    app.put('/:case_id', { schema: updateCaseSchema }, updateCaseHandler)
+    app.delete('/:case_id', { schema: deleteCaseSchema }, deleteCaseHandler)
 }
