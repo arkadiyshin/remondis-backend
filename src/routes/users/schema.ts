@@ -9,7 +9,7 @@ export const newUserSchema = {
 } as const;
 
 export const newUserExtendedSchema = {
-  $id: "newUser",
+  $id: "extedNewUser",
   type: "object",
   properties: {
     id: { type: "integer" },
@@ -21,7 +21,7 @@ export const newUserExtendedSchema = {
 } as const;
 
 export const userFullSchema = {
-  $id: "newUser",
+  $id: "fullUser",
   type: "object",
   properties: {
     ...{ ...newUserExtendedSchema.properties },
@@ -34,7 +34,7 @@ export const userFullSchema = {
 
 
 // Get all users options
-export const getUsersOpts: FastifySchema = {
+export const getUsersSchema: FastifySchema = {
   summary: "user list",
   description: "get list of all users: role-filter",
   tags: ["user"],
@@ -50,12 +50,14 @@ export const getUsersOpts: FastifySchema = {
 };
 
 // Get single user options
-export const getUserOpts: FastifySchema = {
+export const getUserSchema: FastifySchema = {
   summary: "single user list",
   description: "get list of a single users: role-filter, id-filter",
   tags: ["user"],
   params: {
-    id: { type: "integer" },
+    id: { type: "string" },
+  },
+  querystring: {
     role: { type: "string" },
   },
   response: {
@@ -67,7 +69,7 @@ export const getUserOpts: FastifySchema = {
 };
 
 // Create new user options
-export const createNewUserOpts: FastifySchema = {
+export const createNewUserSchema: FastifySchema = {
   summary: "Create a new user",
   description: "Create a new case with only email address before confirmation",
   tags: ["user"],
@@ -81,7 +83,7 @@ export const createNewUserOpts: FastifySchema = {
 };
 
 // continue Create new user options after email confirmation
-export const confirmNewUserOpts: FastifySchema = {
+export const confirmNewUserSchema: FastifySchema = {
   summary: "Confirm user",
   description:
     "After email token comfirmation all new user will continue to fill out the rest of the registration form",
@@ -99,7 +101,7 @@ export const confirmNewUserOpts: FastifySchema = {
 };
 
 // update user options
-export const updateUserOpts: FastifySchema = {
+export const updateUserSchema: FastifySchema = {
   summary: "Update user information",
   description: "update all user information",
   tags: ["user"],
@@ -116,7 +118,7 @@ export const updateUserOpts: FastifySchema = {
 };
 
 // update user role options
-export const changeUserRoleOptsa: FastifySchema = {
+export const changeUserRoleSchema: FastifySchema = {
   summary: "Change user role information",
   description: "update user role",
   tags: ["user"],
@@ -133,7 +135,7 @@ export const changeUserRoleOptsa: FastifySchema = {
 };
 
 // set new user password options
-export const setNewPassOpts: FastifySchema = {
+export const setNewPassSchema: FastifySchema = {
   summary: "set a new password if you forgot your previous password",
   description: "update user password",
   tags: ["user"],
@@ -150,7 +152,7 @@ export const setNewPassOpts: FastifySchema = {
 };
 
 // set new user password options
-export const forgotPassOpts: FastifySchema = {
+export const forgotPassSchema: FastifySchema = {
   summary: "use user email address to request to set a new password",
   description: "user forgot password",
   tags: ["user"],
@@ -161,14 +163,14 @@ export const forgotPassOpts: FastifySchema = {
   response: {
     201: {
       type: "array",
-      items: setNewPassOpts,
+      items: setNewPassSchema,
     },
   },
 };
 
 
 // delete user options
-export const deleteUserOpts: FastifySchema = {
+export const deleteUserSchema: FastifySchema = {
     summary: "for dev team only",
     description: "delete user",
     tags: ["user"],
