@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "tsc -w",
-    "start": "ts-node script.ts",
+    "start": "node dist/server.js",
     "dev": "nodemon dist/server.js"
   },
   "repository": {
