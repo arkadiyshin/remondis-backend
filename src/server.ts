@@ -1,6 +1,9 @@
 import path, { join } from 'path';
 import { fileURLToPath } from 'url';
 import Fastify, { FastifyInstance } from "fastify";
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 // read about autoload options here https://github.com/fastify/fastify-autoload
 import autoLoad from '@fastify/autoload'
@@ -34,8 +37,7 @@ app.register(autoLoad, {
 
 
 // Run the server!
-const port: number = parseInt(process.env.APP_PORT!) || 4000;
-console.log(port)
+const port: number = parseInt(process.env.APP_PORT!) || 3000;
 const start = async () => {
     try {
         await app.listen({ port: port })
