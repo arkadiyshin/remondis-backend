@@ -150,17 +150,15 @@ export const putAppointmentByCaseSchema: FastifySchema = {
     description: "Change an appointment",
     tags: ['appointment'],
     params: {
-        case_id: { type: 'integer' },
+        ...paramsSchema
     },
     body: appointmentExtendedSchema,
     response: {
-        response: {
-            200: {
-                ...replySchema,
-            },
-            404: {
-                ...appointmentNotFoundSchema,
-            }
+        200: {
+            ...replySchema,
+        },
+        404: {
+            ...appointmentNotFoundSchema,
         }
     },
 }

@@ -27,7 +27,7 @@ export default async (app: FastifyInstance) => {
     app.get('/', { schema: getAppointmentsSchema }, getAppointmentsHandler)
     app.get('/:case_id', { schema: getAppointmentByCaseSchema }, getAppointmentByHandler)
     app.post('/', { schema: postAppointmentByCaseSchema }, postAppointmentByCaseHandler)
-    app.put('/:case_id/:id', { schema: putAppointmentByCaseSchema }, putAppointmentByCaseHandler)
+    app.put('/:case_id', { schema: putAppointmentByCaseSchema }, putAppointmentByCaseHandler)
     app.delete('/:case_id', { schema: deleteAppointmentByCaseSchema }, deleteAppointmentByCaseHandler)
 
 }
