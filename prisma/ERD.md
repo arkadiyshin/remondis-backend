@@ -68,6 +68,7 @@ inactive inactive
     Int id PK 
     Int room  
     Bytes photo  
+    String file_name  
     }
   
 

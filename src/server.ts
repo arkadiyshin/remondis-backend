@@ -11,7 +11,17 @@ const __dirname = path.dirname(__filename);
 
 
 const app: FastifyInstance = Fastify({
-    logger: true,
+    logger: {
+        transport: {
+            target: 'pino-pretty',
+            options: {
+                destination: 1,
+                colorize: true,
+                translateTime: 'HH:MM:ss.l',
+                ignore: 'pid,hostname'
+            }
+        }
+    }
 });
 
 app.register(autoLoad, {
@@ -24,7 +34,8 @@ app.register(autoLoad, {
 
 
 // Run the server!
-const port: number = parseInt(process.env.APP_PORT!) || 3000;
+const port: number = parseInt(process.env.APP_PORT!) || 4000;
+console.log(port)
 const start = async () => {
     try {
         await app.listen({ port: port })

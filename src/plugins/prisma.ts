@@ -10,7 +10,7 @@ declare module 'fastify' {
 }
 
 const prismaPlugin: FastifyPluginAsync = fp(async (server, options) => {
-    const prisma = new PrismaClient(options)
+    const prisma = new PrismaClient()
 
     await prisma.$connect()
 

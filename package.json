@@ -36,6 +36,7 @@
     "dotenv": "^16.0.3",
     "json-schema-to-ts": "^2.5.5",
     "nodemon": "^2.0.20",
+    "pino-pretty": "^9.1.1",
     "prisma": "^4.5.0",
     "prisma-docs-generator": "^0.5.0",
     "prisma-erd-generator": "^1.2.2",

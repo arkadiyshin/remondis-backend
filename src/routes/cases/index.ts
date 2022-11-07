@@ -1,10 +1,10 @@
 import type { FastifyInstance } from 'fastify'
 import {
-    CaseCoreSchema,
-    CaseExtendSchema,
-    CaseFullSchema,
-    CaseItemCoreSchema,
-    CaseItemFullSchema,
+    // CaseCoreSchema,
+    // CaseExtendSchema,
+    // CaseFullSchema,
+    // CaseItemCoreSchema,
+    // CaseItemFullSchema,
     getCasesSchema,
     getCaseSchema,
     postCaseSchema,
@@ -39,11 +39,11 @@ import {
 
 export default async (app: FastifyInstance) => {
     
-    app.addSchema(CaseCoreSchema);
-    app.addSchema(CaseExtendSchema);
-    app.addSchema(CaseFullSchema);
-    app.addSchema(CaseItemCoreSchema);
-    app.addSchema(CaseItemFullSchema);
+    // app.addSchema(CaseCoreSchema);
+    // app.addSchema(CaseExtendSchema);
+    // app.addSchema(CaseFullSchema);
+    // app.addSchema(CaseItemCoreSchema);
+    // app.addSchema(CaseItemFullSchema);
 
     app.get('/', { schema: getCasesSchema }, getCasesHandler)
     app.get('/:case_id', { schema: getCaseSchema }, getCaseHandler)

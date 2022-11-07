@@ -1,8 +1,20 @@
 import { type RouteHandler } from 'fastify'
+import type { Params, Querystring, BodyNew, BodyChange, Reply, ReplyList, CaseNotFound } from './schema'
 
 
-export const getCasesHandler: RouteHandler = async function (req, reply) {
-    reply.send('ok')
+// Querystring
+// Params
+// Body 
+// Reply
+
+export const getCasesHandler: RouteHandler<{
+    Querystring: Querystring
+    //Reply: ReplyList
+}> = async function (req, reply) {
+    const cases = await req.server.prisma.case.findMany();
+    //console.log(cases)
+    reply.send({ cases: cases })
+    //reply.send('ok');
 }
 
 export const getCaseHandler: RouteHandler = async function (req, reply) {
