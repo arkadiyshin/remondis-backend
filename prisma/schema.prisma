@@ -11,8 +11,8 @@ generator docs {
 
 generator erd {
   provider = "prisma-erd-generator"
-  output = "./ERD.md"
-  theme = "forest"
+  output   = "./ERD.md"
+  theme    = "forest"
   //includeRelationFromFields = true
 }
 
@@ -52,7 +52,8 @@ model Case {
   assigned_at         DateTime?
   agreeded_at         DateTime?
   client_first_name   String?         @db.VarChar(100)
-  client_email        String          @db.VarChar(100)
+  client_email        String          @default("") @db.VarChar(100)
+  client_phone        String          @default("") @db.VarChar(100)
   address             String          @db.VarChar(255)
   floor               Int             @default(0)
   elevator            Int             @default(0)
@@ -100,11 +101,12 @@ model CaseItem {
 }
 
 model CasePhoto {
-  id      Int   @id @default(autoincrement())
-  case_id Int
-  Case    Case  @relation(fields: [case_id], references: [id])
-  room    Int   @default(0)
-  photo   Bytes
+  id        Int    @id @default(autoincrement())
+  case_id   Int
+  Case      Case   @relation(fields: [case_id], references: [id])
+  room      Int    @default(0)
+  photo     Bytes
+  file_name String @db.VarChar(255)
 }
 
 model Appointment {

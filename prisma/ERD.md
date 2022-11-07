@@ -33,6 +33,7 @@ inactive inactive
     DateTime agreeded_at  "nullable"
     String client_first_name  "nullable"
     String client_email  
+    String client_phone  
     String address  
     Int floor  
     Int elevator  
