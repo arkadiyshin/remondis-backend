@@ -1,8 +1,7 @@
 import type { FastifySchema } from 'fastify'
 import { FromSchema } from 'json-schema-to-ts'
 
-// case
-//CaseCoreSchema rename newCaseSchema
+
 export const newCaseSchema = {
     $id: "newCase",
     type: "object",
@@ -14,14 +13,13 @@ export const newCaseSchema = {
     required: ['client_email, address']
 } as const
 
-//CaseExtendSchema
 export const caseExtendSchema = {
     $id: "caseExtend",
     type: "object",
     properties: {
-        client_first_name: { type: "string" },
-        client_last_name: { type: "string" },
-        type_of_property: { type: "string" },
+        client_first_name: { type: ["string", "null"] },
+        client_last_name: { type: ["string", "null"] },
+        type_of_property: { type: ["string", "null"] },
         floor: { type: "integer" },
         elevator: { type: "integer" },
         squaremeters: { type: "integer" },
@@ -30,44 +28,36 @@ export const caseExtendSchema = {
     }
 } as const
 
-//CaseFullSchema rename CaseSchema
 export const caseSchema = {
     $id: "case",
     type: "object",
     properties: {
         ...{ ...newCaseSchema.properties }, ...{ ...caseExtendSchema.properties },
+        case_id: { type: "number" },
         create_time: { type: "string", format: "date-time" },
         assigned_time: { type: "string", format: "date-time" },
         confirmed_time: { type: "string", format: "date-time" },
-        state_id: { type: "integer" },
+        state_id: { type: ["integer", "null"] },
         state: { type: "string" },
-        inspector_id: { type: "integer" },
-        inspector: { type: "string" },
-        manager_id: { type: "integer" },
-        manager: { type: "string" },
+        inspector_id: { type: ["integer", "null"] },
+        inspector: { type: ["string", "null"] },
+        manager_id: { type: ["integer", "null"] },
+        manager: { type: ["string", "null"] },
     }
 } as const
 
 /*
 // case item
-export const CaseItemCoreSchema = {
-    $id: "CaseItemCore",
+export const caseItemSchema = {
+    $id: "caseItem",
     type: "object",
     properties: {
         room: { type: "integer" },
-        description: { type: "string" }
-    },
-} as const
-
-export const CaseItemFullSchema = {
-    $id: "CaseItemFull",
-    type: "object",
-    properties: {
-        ...{ ...CaseItemCoreSchema.properties },
+        description: { type: "string" },
         room_title: { type: "string" },
         photo_link: { type: "string" },
         quantity: { type: "integer" }
-    }
+    },
 } as const
 */
 
@@ -85,9 +75,9 @@ export const caseNotFoundSchema = {
 
 const paramsSchema = {
     type: 'object',
-    required: ['id'],
+    required: ['case_id'],
     properties: {
-        id: { type: 'number' }
+        case_id: { type: 'string' }
     },
     additionalProperties: false
 } as const
@@ -120,7 +110,7 @@ const replyListSchema = {
     properties: {
         cases: {
             type: 'array',
-            cases: { $ref: 'case#' }
+            case: { $ref: 'case#' }
         }
     },
     additionalProperties: false
@@ -139,11 +129,6 @@ export type ReplyList = FromSchema<
     typeof replyListSchema,
     { references: [typeof caseSchema] }
 >
-
-// code: 200,
-// success: true,
-// message: "Case is changed",
-// oneCase,
 
 // Options 
 export const getCasesSchema: FastifySchema = {
@@ -178,10 +163,10 @@ export const getCaseSchema: FastifySchema = {
     },
     response: {
         200: {
-            caseSchema
+            ...replySchema
         },
         404: {
-            caseNotFoundSchema
+            ...caseNotFoundSchema
         }
     },
 }
@@ -192,7 +177,10 @@ export const postCaseSchema: FastifySchema = {
     tags: ['case'],
     body: newCaseSchema,
     response: {
-        201: caseSchema,
+        201: {
+            ...replySchema
+        },
+
     },
 }
 
@@ -205,7 +193,12 @@ export const updateCaseSchema: FastifySchema = {
     },
     body: newCaseSchema,
     response: {
-        201: caseSchema,
+        200: {
+            ...replySchema
+        },
+        404: {
+            ...caseNotFoundSchema
+        }
     },
 }
 
@@ -218,7 +211,12 @@ export const changeCaseSchema: FastifySchema = {
     },
     body: caseExtendSchema,
     response: {
-        201: caseSchema,
+        200: {
+            ...replySchema
+        },
+        404: {
+            ...caseNotFoundSchema
+        }
     },
 }
 
@@ -232,7 +230,7 @@ export const deleteCaseSchema: FastifySchema = {
     response: {
         201: {
             message: { type: "string" },
-            success: {type: "boolean"},
+            success: { type: "boolean" },
         }
     },
 }
@@ -246,7 +244,12 @@ export const assignCaseSchema: FastifySchema = {
     },
     body: { inspector_id: { type: "integer" } },
     response: {
-        201: caseSchema,
+        200: {
+            ...replySchema
+        },
+        403: {
+            ...caseNotFoundSchema
+        }
     },
 }
 
@@ -259,7 +262,12 @@ export const declineCaseSchema: FastifySchema = {
     },
     body: { reason: { type: "string" } },
     response: {
-        201: caseSchema,
+        200: {
+            ...replySchema
+        },
+        403: {
+            ...caseNotFoundSchema
+        }
     },
 }
 
@@ -271,11 +279,16 @@ export const acceptCaseSchema: FastifySchema = {
         id: { type: "integer" },
     },
     response: {
-        201: caseSchema,
+        200: {
+            ...replySchema
+        },
+        403: {
+            ...caseNotFoundSchema
+        }
     },
 }
 
-export const submitCaseSchema: FastifySchema = {
+export const readyCaseSchema: FastifySchema = {
 
     summary: "Inspector fills in all information",
     description: "Inspector fills in all information",
@@ -284,7 +297,12 @@ export const submitCaseSchema: FastifySchema = {
         id: { type: "integer" },
     },
     response: {
-        201: caseSchema,
+        200: {
+            ...replySchema
+        },
+        403: {
+            ...caseNotFoundSchema
+        }
     },
 }
 
@@ -296,7 +314,12 @@ export const quoteCaseOpts: FastifySchema = {
         id: { type: "integer" },
     },
     response: {
-        201: caseSchema,
+        200: {
+            ...replySchema
+        },
+        403: {
+            ...caseNotFoundSchema
+        }
     },
 }
 
@@ -309,6 +332,11 @@ export const closeCaseOpts: FastifySchema = {
     },
     body: { reason: { type: "string" } },
     response: {
-        201: caseSchema,
+        200: {
+            ...replySchema
+        },
+        403: {
+            ...caseNotFoundSchema
+        }
     },
 }
