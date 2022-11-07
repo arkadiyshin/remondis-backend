@@ -2,7 +2,7 @@ import type { FastifySchema } from 'fastify'
 import { FromSchema } from 'json-schema-to-ts'
 
 
-export const newCaseSchema = {
+export const caseNewSchema = {
     $id: "newCase",
     type: "object",
     properties: {
@@ -32,7 +32,7 @@ export const caseSchema = {
     $id: "case",
     type: "object",
     properties: {
-        ...{ ...newCaseSchema.properties }, ...{ ...caseExtendSchema.properties },
+        ...{ ...caseNewSchema.properties }, ...{ ...caseExtendSchema.properties },
         case_id: { type: "number" },
         create_time: { type: "string", format: "date-time" },
         assigned_time: { type: "string", format: "date-time" },
@@ -63,7 +63,7 @@ export const caseItemSchema = {
 
 // types
 export const caseNotFoundSchema = {
-    $id: 'CaseNotFound',
+    $id: 'caseNotFound',
     type: 'object',
     required: ['success', 'message'],
     properties: {
@@ -89,8 +89,7 @@ const querystringSchema = {
         date_to: { type: ["string"], format: "date-time" },
         state: { type: ["string"] },
         inspector_id: { type: "integer" },
-        manager_id: { type: "integer" },
-        role: { type: "string" },
+        manager_id: { type: "integer" }
     },
     additionalProperties: false
 } as const
@@ -119,7 +118,7 @@ const replyListSchema = {
 export type CaseNotFound = FromSchema<typeof caseNotFoundSchema>
 export type Params = FromSchema<typeof paramsSchema>
 export type Querystring = FromSchema<typeof querystringSchema>
-export type BodyNew = FromSchema<typeof newCaseSchema>
+export type BodyNew = FromSchema<typeof caseNewSchema>
 export type BodyChange = FromSchema<typeof caseExtendSchema>
 export type Reply = FromSchema<
     typeof replySchema,
@@ -159,7 +158,7 @@ export const getCaseSchema: FastifySchema = {
     description: "Get single case by id",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
     response: {
         200: {
@@ -175,7 +174,7 @@ export const postCaseSchema: FastifySchema = {
     summary: "Create a new case",
     description: "Create a new case with necessary information",
     tags: ['case'],
-    body: newCaseSchema,
+    body: caseNewSchema,
     response: {
         201: {
             ...replySchema
@@ -189,9 +188,9 @@ export const updateCaseSchema: FastifySchema = {
     description: "Update the case by id",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
-    body: newCaseSchema,
+    body: caseNewSchema,
     response: {
         200: {
             ...replySchema
@@ -207,7 +206,7 @@ export const changeCaseSchema: FastifySchema = {
     description: "Add info to case by id",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
     body: caseExtendSchema,
     response: {
@@ -225,7 +224,7 @@ export const deleteCaseSchema: FastifySchema = {
     description: "Delete case by id",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
     response: {
         201: {
@@ -240,7 +239,7 @@ export const assignCaseSchema: FastifySchema = {
     description: "Manager assigns case to inspector",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
     body: { inspector_id: { type: "integer" } },
     response: {
@@ -258,7 +257,7 @@ export const declineCaseSchema: FastifySchema = {
     description: "Inspector declines assignement",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
     body: { reason: { type: "string" } },
     response: {
@@ -276,7 +275,7 @@ export const acceptCaseSchema: FastifySchema = {
     description: "Inspector accepts assignement",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
     response: {
         200: {
@@ -294,7 +293,7 @@ export const readyCaseSchema: FastifySchema = {
     description: "Inspector fills in all information",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
     response: {
         200: {
@@ -311,7 +310,7 @@ export const quoteCaseOpts: FastifySchema = {
     description: "Manager sends quote to household owner",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
     response: {
         200: {
@@ -328,7 +327,7 @@ export const closeCaseOpts: FastifySchema = {
     description: "Manager closes case",
     tags: ['case'],
     params: {
-        id: { type: "integer" },
+        ...paramsSchema,
     },
     body: { reason: { type: "string" } },
     response: {

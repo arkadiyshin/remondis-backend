@@ -28,7 +28,7 @@ export const getCaseHandler: RouteHandler<{
     });
     
     if (findedCase)
-        reply.code(200).send({ success: true, message: 'Case not found', case: findedCase })
+        reply.code(200).send({ success: true, message: 'Case found', case: findedCase })
     else
         reply.code(404).send({ success: false, message: 'Case not found' })
 }

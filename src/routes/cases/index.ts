@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import {
-    newCaseSchema,
+    caseNewSchema,
     caseSchema,
     caseExtendSchema,
     getCasesSchema,
@@ -34,7 +34,7 @@ import {
 
 export default async (app: FastifyInstance) => {
     
-    app.addSchema(newCaseSchema);
+    app.addSchema(caseNewSchema);
     app.addSchema(caseExtendSchema);
     app.addSchema(caseSchema);
 
