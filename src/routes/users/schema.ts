@@ -11,7 +11,7 @@ export const userNewSchema = {
 } as const;
 
 export const userExtendedSchema = {
-    $id: "extendedUser",
+    $id: "userExtended",
     type: "object",
     properties: {
         id: { type: "integer" },

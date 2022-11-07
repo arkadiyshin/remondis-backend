@@ -3,7 +3,7 @@ import { FromSchema } from 'json-schema-to-ts'
 
 
 export const caseNewSchema = {
-    $id: "newCase",
+    $id: "caseNew",
     type: "object",
     properties: {
         client_phone: { type: "string" },
@@ -14,7 +14,7 @@ export const caseNewSchema = {
 } as const
 
 export const caseExtendSchema = {
-    $id: "caseExtend",
+    $id: "caseExtended",
     type: "object",
     properties: {
         client_first_name: { type: ["string", "null"] },
