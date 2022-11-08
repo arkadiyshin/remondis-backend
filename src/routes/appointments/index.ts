@@ -1,7 +1,5 @@
 import type { FastifyInstance } from 'fastify'
 import {
-    appointmentNewSchema,
-    appointmentExtendedSchema,
     appointmentSchema,
     getAppointmentsSchema,
     getAppointmentByCaseSchema,
@@ -20,8 +18,6 @@ import {
 
 export default async (app: FastifyInstance) => {
     
-    app.addSchema(appointmentNewSchema);
-    app.addSchema(appointmentExtendedSchema);
     app.addSchema(appointmentSchema);
 
     app.get('/', { schema: getAppointmentsSchema }, getAppointmentsHandler)

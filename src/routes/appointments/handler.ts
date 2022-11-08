@@ -1,15 +1,15 @@
 import { type RouteHandler } from 'fastify';
-import { AppointmentNotFound, Params, Querystring, BodyNew, BodyChange, Reply, ReplyList, } from './schema';
+import { AppointmentNotFound, Params, Querystring, Body, Reply, ReplyList, } from './schema';
 
 
 export const getAppointmentsHandler: RouteHandler<{
     Querystring: Querystring
     Reply: ReplyList
-}> = async function (req, reply) {   
-    
+}> = async function (req, reply) {
+
     const appointment = await req.server.prisma.appointment.findMany();
-      reply.code(200).send({appointments: appointment});
-      console.log({appointments: appointment});
+    reply.code(200).send({ appointments: appointment });
+    console.log({ appointments: appointment });
 }
 
 export const getAppointmentByHandler: RouteHandler<{
@@ -24,7 +24,7 @@ export const getAppointmentByHandler: RouteHandler<{
             case_id: id,
         },
     });
-    
+
     if (findedAppointment)
         reply.code(200).send({ success: true, message: 'Appoinment found', appointment: findedAppointment })
     else
@@ -34,24 +34,24 @@ export const getAppointmentByHandler: RouteHandler<{
 
 export const postAppointmentByCaseHandler: RouteHandler<{
     Params: Params
-    Body: BodyNew
+    Body: Body
     Reply: Reply
 }> = async function (req, reply) {
-    
+
     const { case_id } = req.params;
     const { date, time_from, time_to } = req.body
-    
+
     const id = parseInt(case_id)
     const postAppointment = await req.server.prisma.appointment.create({
-        data : {
+        data: {
             case_id: id,
             date: date,
             time_from: time_from,
             time_to: time_to,
         }
     })
-    
-    reply.send({success: true, message: 'Appoinment created', appointment: postAppointment})
+
+    reply.send({ success: true, message: 'Appoinment created', appointment: postAppointment })
 }
 
 export const putAppointmentByCaseHandler: RouteHandler<{
@@ -59,7 +59,7 @@ export const putAppointmentByCaseHandler: RouteHandler<{
     Body: BodyChange
     Reply: Reply
 }> = async function (req, reply) {
-    
+
     const { case_id } = req.params;
     const id = parseInt(case_id);
     const { date, time_from, time_to } = req.body;

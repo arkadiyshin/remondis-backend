@@ -2,30 +2,13 @@ import type { FastifySchema } from 'fastify'
 import { FromSchema } from 'json-schema-to-ts'
 
 
-export const appointmentNewSchema = {
-    $id: "appointmentNew",
-    type: "object",
-    properties: {
-        date: { type: "string" },
-        time_from: { type: "string"},
-        time_to: { type: "string"}
-    },
-} as const;
-
-export const appointmentExtendedSchema = {
-    $id: "appointmentExtended",
-    type: "object",
-    properties: {
-        ...{ ...appointmentNewSchema.properties },
-        case_id: { type: "integer" },
-    },
-} as const;
-
 export const appointmentSchema = {
     $id: "appointment",
     type: "object",
     properties: {
-        ...{ ...appointmentExtendedSchema.properties },
+        date: { type: "string"},
+        time_from: { type: "string"},
+        time_to: { type: "string"}
     },
 } as const;
 
@@ -54,8 +37,8 @@ const querystringSchema = {
     type: 'object',
     properties: {
         case_id: { type: "string" },
-        date_from: { type: "string", format: "date" },
-        date_to: { type: "string", format: "date" },
+        date_from: { type: "string"},
+        date_to: { type: "string"},
     },
     additionalProperties: false
 } as const
@@ -84,8 +67,7 @@ const replyListSchema = {
 export type AppointmentNotFound = FromSchema<typeof appointmentNotFoundSchema>
 export type Params = FromSchema<typeof paramsSchema>
 export type Querystring = FromSchema<typeof querystringSchema>
-export type BodyNew = FromSchema<typeof appointmentNewSchema>
-export type BodyChange = FromSchema<typeof appointmentExtendedSchema>
+export type Body = FromSchema<typeof appointmentSchema>
 export type Reply = FromSchema<
     typeof replySchema,
     { references: [typeof appointmentSchema] }
@@ -102,9 +84,7 @@ export const getAppointmentsSchema: FastifySchema = {
     description: "Get list of appointments",
     tags: ['appointment'],
     querystring: {
-        case_id: { type: "integer" },
-        date_from: { type: "string", format: "date" },
-        date_to: { type: "string", format: "date" },
+        ...querystringSchema
     },
     response: {
         200: {
@@ -137,7 +117,7 @@ export const postAppointmentByCaseSchema: FastifySchema = {
     params: {
         ...paramsSchema
     },
-    body: appointmentNewSchema,
+    body: appointmentSchema,
     response: {
         200: {
             ...replySchema,
@@ -152,7 +132,7 @@ export const putAppointmentByCaseSchema: FastifySchema = {
     params: {
         ...paramsSchema
     },
-    body: appointmentExtendedSchema,
+    body: appointmentSchema,
     response: {
         200: {
             ...replySchema,
