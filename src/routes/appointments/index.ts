@@ -1,8 +1,8 @@
 import type { FastifyInstance } from 'fastify'
 import {
-    CoreAppointmentSchema,
-    NewAppointmentSchema,
-    FullAppointmentSchema,
+    appointmentNewSchema,
+    appointmentExtendedSchema,
+    appointmentSchema,
     getAppointmentsSchema,
     getAppointmentByCaseSchema,
     postAppointmentByCaseSchema,
@@ -20,14 +20,14 @@ import {
 
 export default async (app: FastifyInstance) => {
     
-    app.addSchema(CoreAppointmentSchema);
-    app.addSchema(NewAppointmentSchema);
-    app.addSchema(FullAppointmentSchema);
+    app.addSchema(appointmentNewSchema);
+    app.addSchema(appointmentExtendedSchema);
+    app.addSchema(appointmentSchema);
 
     app.get('/', { schema: getAppointmentsSchema }, getAppointmentsHandler)
     app.get('/:case_id', { schema: getAppointmentByCaseSchema }, getAppointmentByHandler)
     app.post('/', { schema: postAppointmentByCaseSchema }, postAppointmentByCaseHandler)
-    app.put('/:case_id/:id', { schema: putAppointmentByCaseSchema }, putAppointmentByCaseHandler)
+    app.put('/:case_id', { schema: putAppointmentByCaseSchema }, putAppointmentByCaseHandler)
     app.delete('/:case_id', { schema: deleteAppointmentByCaseSchema }, deleteAppointmentByCaseHandler)
 
 }

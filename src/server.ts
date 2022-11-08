@@ -1,7 +1,9 @@
 import path, { join } from "path";
 import { fileURLToPath } from "url";
 import Fastify, { FastifyInstance } from "fastify";
-import fs from "fs";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 // read about autoload options here https://github.com/fastify/fastify-autoload
 import autoLoad from "@fastify/autoload";
@@ -11,7 +13,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app: FastifyInstance = Fastify({
-  logger: true,
+  logger: {
+    transport: {
+      target: "pino-pretty",
+      options: {
+        destination: 1,
+        colorize: true,
+        translateTime: "HH:MM:ss.l",
+        ignore: "pid,hostname",
+      },
+    },
+  },
 });
 
 app.register(autoLoad, {
