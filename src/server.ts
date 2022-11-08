@@ -34,22 +34,22 @@ app.register(autoLoad, {
   dir: join(__dirname, "routes"),
 });
 
-const bufferPicture = async () => {
-  await fs.readFile("./assets/photo_for_db.jpeg", function read(err, data) {
-    if (err) {
-      throw err;
-    }
-    return data;
-  });
-};
+// const bufferPicture = async () => {
+//   await fs.readFile("./assets/photo_for_db.jpeg", function read(err, data) {
+//     if (err) {
+//       throw err;
+//     }
+//     return data;
+//   });
+// };
 
-console.log(app.prisma);
+// console.log(app.prisma);
 
-app.prisma.casePhoto.create({
-  data: {
-    photo: Buffer.from(bufferPicture),
-  },
-});
+// app.prisma.casePhoto.create({
+//   data: {
+//     photo: Buffer.from(bufferPicture),
+//   },
+// });
 
 // Run the server!
 const port: number = parseInt(process.env.APP_PORT!) || 3000;
