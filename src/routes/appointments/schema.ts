@@ -6,9 +6,9 @@ export const appointmentNewSchema = {
     $id: "appointmentNew",
     type: "object",
     properties: {
-        date: { type: "string", format: "date" },
-        time_from: { type: "string", format: "time" },
-        time_to: { type: "string", format: "time" }
+        date: { type: "string" },
+        time_from: { type: "string"},
+        time_to: { type: "string"}
     },
 } as const;
 
@@ -31,7 +31,7 @@ export const appointmentSchema = {
 
 // types
 export const appointmentNotFoundSchema = {
-    $id: 'userNotFound',
+    $id: 'appointmentNotFound',
     type: 'object',
     required: ['success', 'message'],
     properties: {
@@ -43,9 +43,9 @@ export const appointmentNotFoundSchema = {
 
 const paramsSchema = {
     type: 'object',
-    required: ['appointment_id'],
+    required: ['case_id'],
     properties: {
-        case_id: { type: 'integer' },
+        case_id: { type: 'string' },
     },
     additionalProperties: false
 } as const
@@ -53,7 +53,7 @@ const paramsSchema = {
 const querystringSchema = {
     type: 'object',
     properties: {
-        case_id: { type: "integer" },
+        case_id: { type: "string" },
         date_from: { type: "string", format: "date" },
         date_to: { type: "string", format: "date" },
     },
@@ -73,7 +73,7 @@ const replySchema = {
 const replyListSchema = {
     type: 'object',
     properties: {
-        users: {
+        appointments: {
             type: 'array',
             appointments: { $ref: 'appointment#' }
         }
