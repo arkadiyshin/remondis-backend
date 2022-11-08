@@ -59,7 +59,7 @@ model Case {
   elevator            Int             @default(0)
   squaremeters        Float           @default(0)
   quantity            Int             @default(0)
-  way_to_property     String          @default("")
+  way_to_property     String?         @default("")
   type_of_property_id Int?
   TypeOfProperty      TypeOfProperty? @relation(fields: [type_of_property_id], references: [id])
   state_id            Int?

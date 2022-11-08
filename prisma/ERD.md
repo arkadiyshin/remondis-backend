@@ -39,7 +39,7 @@ inactive inactive
     Int elevator  
     Float squaremeters  
     Int quantity  
-    String way_to_property  
+    String way_to_property  "nullable"
     }
   
 
