@@ -1,9 +1,7 @@
 import path, { join } from "path";
 import { fileURLToPath } from "url";
 import Fastify, { FastifyInstance } from "fastify";
-import * as dotenv from "dotenv";
-
-dotenv.config();
+import {APP_PORT} from "./configuration.js";
 
 // read about autoload options here https://github.com/fastify/fastify-autoload
 import autoLoad from "@fastify/autoload";
@@ -26,6 +24,7 @@ const app: FastifyInstance = Fastify({
   },
 });
 
+
 app.register(autoLoad, {
   dir: join(__dirname, "plugins"),
 });
@@ -34,25 +33,9 @@ app.register(autoLoad, {
   dir: join(__dirname, "routes"),
 });
 
-// const bufferPicture = async () => {
-//   await fs.readFile("./assets/photo_for_db.jpeg", function read(err, data) {
-//     if (err) {
-//       throw err;
-//     }
-//     return data;
-//   });
-// };
-
-// console.log(app.prisma);
-
-// app.prisma.casePhoto.create({
-//   data: {
-//     photo: Buffer.from(bufferPicture),
-//   },
-// });
 
 // Run the server!
-const port: number = parseInt(process.env.APP_PORT!) || 3000;
+const port: number = parseInt(APP_PORT!) || 3000;
 const start = async () => {
   try {
     await app.listen({ port: port });
