@@ -52,6 +52,7 @@ model Case {
   assigned_at         DateTime?
   agreeded_at         DateTime?
   client_first_name   String?         @db.VarChar(100)
+  client_last_name    String?         @db.VarChar(100)
   client_email        String          @default("") @db.VarChar(100)
   client_phone        String          @default("") @db.VarChar(100)
   address             String          @db.VarChar(255)

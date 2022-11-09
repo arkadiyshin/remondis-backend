@@ -18,7 +18,7 @@ export const caseExtendSchema = {
   properties: {
     client_first_name: { type: ["string", "null"] },
     client_last_name: { type: ["string", "null"] },
-    type_of_property: { type: ["string", "null"] },
+    type_of_property_id: { type: ["string", "null"] },
     floor: { type: "integer" },
     elevator: { type: "integer" },
     squaremeters: { type: "integer" },
@@ -44,6 +44,15 @@ export const caseSchema = {
     manager_id: { type: ["integer", "null"] },
     manager: { type: ["string", "null"] },
   },
+} as const;
+
+export const caseUserSchema = {
+  $id: "caseUser",
+  type: "object",
+  properties: {
+    user_id: { type: "string" },
+  },
+  required: ["user_id"],
 } as const;
 
 /*
@@ -239,7 +248,7 @@ export const assignCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { inspector_id: { type: "integer" } },
+  body: { ...caseUserSchema.properties, inspector_id: { type: "integer" } },
   response: {
     200: {
       ...replySchema,
@@ -257,7 +266,7 @@ export const declineCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { reason: { type: "string" } },
+  body: { ...caseUserSchema.properties, reason: { type: "string" } },
   response: {
     200: {
       ...replySchema,
@@ -275,6 +284,7 @@ export const acceptCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
+  body: { ...caseUserSchema },
   response: {
     200: {
       ...replySchema,
@@ -292,6 +302,7 @@ export const readyCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
+  body: { ...caseUserSchema },
   response: {
     200: {
       ...replySchema,
@@ -309,6 +320,7 @@ export const quoteCaseOpts: FastifySchema = {
   params: {
     ...paramsSchema,
   },
+  body: { ...caseUserSchema },
   response: {
     200: {
       ...replySchema,
@@ -326,7 +338,7 @@ export const closeCaseOpts: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { reason: { type: "string" } },
+  body: { ...caseUserSchema.properties, reason: { type: "string" } },
   response: {
     200: {
       ...replySchema,
