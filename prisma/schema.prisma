@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.md"
+  theme    = "forest"
+  //includeRelationFromFields = true
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  manager
+  inspector
+}
+
+enum UserState {
+  active
+  inactive
+}
+
+model User {
+  id              Int           @id @default(autoincrement())
+  email           String        @unique @db.VarChar(100)
+  username        String?       @unique @db.VarChar(100)
+  hash_password   String?       @db.VarChar(255)
+  role            Role?
+  state           UserState?
+  token           String?       @db.VarChar(255)
+  created_at      DateTime      @default(now())
+  confirmed_at    DateTime?
+  CaseByManager   Case[]        @relation("Manager")
+  CaseByInspector Case[]        @relation("Inspector")
+  CaseHistory     CaseHistory[]
+}
+
+model Case {
+  id                  Int             @id @default(autoincrement())
+  created_at          DateTime        @default(now())
+  assigned_at         DateTime?
+  agreeded_at         DateTime?
+  client_first_name   String?         @db.VarChar(100)
+  client_last_name    String?         @db.VarChar(100)
+  client_email        String          @default("") @db.VarChar(100)
+  client_phone        String          @default("") @db.VarChar(100)
+  address             String          @db.VarChar(255)
+  floor               Int             @default(0)
+  elevator            Int             @default(0)
+  squaremeters        Float           @default(0)
+  quantity            Int             @default(0)
+  way_to_property     String?         @default("")
+  type_of_property_id Int?
+  TypeOfProperty      TypeOfProperty? @relation(fields: [type_of_property_id], references: [id])
+  state_id            Int?
+  State               CaseState?      @relation(fields: [state_id], references: [id])
+  manager_id          Int?
+  Manager             User?           @relation("Manager", fields: [manager_id], references: [id])
+  inspector_id        Int?
+  Inspector           User?           @relation("Inspector", fields: [inspector_id], references: [id])
+  CaseItem            CaseItem[]
+  CasePhoto           CasePhoto[]
+  Appointment         Appointment[]
+  CaseHistory         CaseHistory[]
+}
+
+model TypeOfProperty {
+  id    Int    @id @default(autoincrement())
+  title String @db.VarChar(20)
+  Cases Case[]
+}
+
+model CaseState {
+  id                    Int           @id @default(autoincrement())
+  title                 String        @db.VarChar(20)
+  Case                  Case[]
+  CaseHistoryByState    CaseHistory[] @relation("CaseState")
+  CaseHistoryByNewState CaseHistory[] @relation("CaseNewState")
+  TransitionByState     Transition[]  @relation("State")
+  TransitionByNextState Transition[]  @relation("NextState")
+}
+
+model CaseItem {
+  id          Int     @id @default(autoincrement())
+  case_id     Int
+  Case        Case    @relation(fields: [case_id], references: [id])
+  room        Int     @default(0)
+  room_title  String? @db.VarChar(20)
+  description String?
+  quantity    Int     @default(0)
+}
+
+model CasePhoto {
+  id        Int    @id @default(autoincrement())
+  case_id   Int
+  Case      Case   @relation(fields: [case_id], references: [id])
+  room      Int    @default(0)
+  photo     Bytes
+  file_name String @db.VarChar(255)
+}
+
+model Appointment {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @db.Date
+  time_from DateTime @db.Time()
+  time_to   DateTime @db.Time()
+  case_id   Int
+  Case      Case     @relation(fields: [case_id], references: [id])
+}
+
+model CaseHistory {
+  id                Int       @id @default(autoincrement())
+  time              DateTime
+  case_id           Int
+  Case              Case      @relation(fields: [case_id], references: [id])
+  case_state_id     Int
+  CaseState         CaseState @relation("CaseState", fields: [case_state_id], references: [id])
+  case_new_state_id Int
+  CaseNewState      CaseState @relation("CaseNewState", fields: [case_new_state_id], references: [id])
+  user_id           Int
+  User              User      @relation(fields: [user_id], references: [id])
+  description       String?
+  case_data         Json?
+}
+
+model Transition {
+  id               Int                @id @default(autoincrement())
+  state_id         Int
+  State            CaseState          @relation("State", fields: [state_id], references: [id])
+  next_state_id    Int
+  NextState        CaseState          @relation("NextState", fields: [next_state_id], references: [id])
+  TransitionAccess TransitionAccess[]
+}
+
+model TransitionAccess {
+  role          Role
+  transition_id Int
+  Transition    Transition @relation(fields: [transition_id], references: [id])
+
+  @@unique([role, transition_id])
+}
