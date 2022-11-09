@@ -28,12 +28,14 @@
     "@fastify/swagger": "^8.0.0",
     "@fastify/swagger-ui": "^1.1.0",
     "@prisma/client": "^4.5.0",
+    "bcrypt": "^5.1.0",
     "fastify": "^4.8.1",
     "fastify-plugin": "^4.3.0",
     "nodemailer": "^6.8.0"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^9.1.7",
+    "@types/bcrypt": "^5.0.0",
     "@types/node": "^18.8.5",
     "@types/nodemailer": "^6.4.6",
     "dotenv": "^16.0.3",

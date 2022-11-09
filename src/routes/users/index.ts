@@ -11,6 +11,7 @@ import {
 	forgotPassSchema,
 	setNewPassSchema,
 	deleteUserSchema,
+	loginUserSchema,
 } from "./schema.js";
 import {
 	getUserHandler,
@@ -21,6 +22,7 @@ import {
 	forgotPassHandler,
 	setNewPassHandler,
 	deleteUserHandler,
+	loginUserHandler,
 } from "./handler.js";
 
 
@@ -32,6 +34,7 @@ export default async (app: FastifyInstance) => {
 
 	app.get('/', { schema: getUsersSchema }, getUsersHandler)
 	app.get('/:user_id', { schema: getUserSchema }, getUserHandler)
+	app.post('/login', {schema: loginUserSchema}, loginUserHandler)
 	app.post('/register', { schema: createUserSchema }, createUserHandler)
 	app.put('/:user_id/confirm', { schema: confirmUserSchema }, confirmedUserHandler)
 	app.put('/:user_id', { schema: updateUserSchema }, updateUserHandler)
