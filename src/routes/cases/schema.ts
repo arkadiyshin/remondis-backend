@@ -248,7 +248,7 @@ export const assignCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { ...caseUserSchema, inspector_id: { type: "integer" } },
+  body: { ...caseUserSchema.properties, inspector_id: { type: "integer" } },
   response: {
     200: {
       ...replySchema,
@@ -266,7 +266,7 @@ export const declineCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { ...caseUserSchema, reason: { type: "string" } },
+  body: { ...caseUserSchema.properties, reason: { type: "string" } },
   response: {
     200: {
       ...replySchema,
@@ -338,7 +338,7 @@ export const closeCaseOpts: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { ...caseUserSchema, reason: { type: "string" } },
+  body: { ...caseUserSchema.properties, reason: { type: "string" } },
   response: {
     200: {
       ...replySchema,
