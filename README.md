@@ -1,6 +1,19 @@
+# For contributors
+
+---
+
+## repository structure
+
+**_branches_**
+* `main` - production branch
+* `dev` - make pull requests to this branch with all working code 
+* `<feature>` - create and use the branch for each feature
+
+---
+
 ## commit rules
 
-### commit message shoul contain 3 parts: 
+**_commit message should contain 3 parts_**: 
 > `<type>(<scope>): <subject>`
 
 * `<type>` - the type of the made changes. Should be one of:
@@ -17,3 +30,24 @@
 use imperative, present tense. "fix" not "fixed", "add" not "added". By the way, Git also uses this convention for its own preformateed messages("Merge pull request...").
 don't capitalize first letter
 do not add dot(.) at the end of subject
+
+*examples:*
+* `docs (general): recreate prisma model documentation`
+* `fix (case): fix post handler`
+* `feat (user): add token generator`
+
+---
+
+## documentations
+
+1. Swagger: http://localhost:[APP_PORT]/docs/static/index.html
+* check REST API endpoints and test it
+1. ER diagram: https://github.com/WildCodeSchool/2022-07-EN-Berlin-Remote1-Project3Backend/blob/dev/prisma/ERD.md
+* To update ER diagram after model changes: `npx prisma migrate dev --name <model name>`
+1. DB model and documentation: http://localhost:[LIFE_SERVER_PORT]/prisma/docs/index.html
+* To update DB model and documentation after model changes: `npx prisma migrate dev --name <model name>`
+1. Prisma studio: http://localhost:[PRISMA_STUDIO_PORT]/
+* Prisma studio the easiest way to explore and manipulate your data. Just run inside your project directory command `npx prisma studio`
+ 
+---
+
