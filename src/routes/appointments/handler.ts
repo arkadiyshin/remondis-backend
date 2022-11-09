@@ -50,13 +50,15 @@ export const postAppointmentByCaseHandler: RouteHandler<{
             time_to: time_to,
         }
     })
-
-    reply.send({ success: true, message: 'Appoinment created', appointment: postAppointment })
+    if (postAppointment)
+        reply.code(200).send({ success: true, message: 'Appoinment created', appointment: postAppointment })
+    else
+        reply.code(404).send({ success: false, message: 'Appoinment not found' })    
 }
 
 export const putAppointmentByCaseHandler: RouteHandler<{
     Params: Params
-    Body: BodyChange
+    Body: Body
     Reply: Reply
 }> = async function (req, reply) {
 
@@ -64,20 +66,41 @@ export const putAppointmentByCaseHandler: RouteHandler<{
     const id = parseInt(case_id);
     const { date, time_from, time_to } = req.body;
 
-    const putAppointmentByCaseHandler = await req.server.prisma.appointment.update({
+    const putAppointmentByCase = await req.server.prisma.appointment.updateMany({
         data: {
             case_id: id,
             date: date,
             time_from: time_from,
             time_to: time_to,
+        },
+        where: {
+            case_id: id
         }
     })
+    if (putAppointmentByCase)
+        reply.code(200).send({ success: true, message: 'Appoinment changed', appointment: putAppointmentByCase })
+    else
+        reply.code(404).send({ success: false, message: 'Appoinment not found' })        
+    
 }
 
-export const deleteAppointmentByCaseHandler: RouteHandler = async function (req, reply) {
-    reply.send('ok')
+export const deleteAppointmentByCaseHandler: RouteHandler <{
+    Params: Params
+    Reply: Reply
+}> = async function (req, reply) {
+    
+    const { case_id } = req.params;
+    const id = parseInt(case_id);
+
+    const deleteAppointmentByCaseId = await req.server.prisma.appointment.deleteMany({
+        where: {
+            case_id : id
+        }
+    })
+    if (deleteAppointmentByCaseId)
+        reply.code(200).send({ success: true, message: 'Appoinment deleted' })
+    else
+        reply.code(404).send({ success: false, message: 'Appoinment not found' })
+    
 }
 
-export const deleteCaseHandler: RouteHandler = async function (req, reply) {
-    reply.send('ok')
-}
