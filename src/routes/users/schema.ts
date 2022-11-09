@@ -15,7 +15,7 @@ export const userExtendedSchema = {
     type: "object",
     properties: {
         id: { type: "integer" },
-        username: { type: ["string","null"] },
+        username: { type: ["string","null"] },        
         //password: { type: "string", format: "password" },
         ...{ ...userNewSchema.properties },
         role: { type: ["string", "null"] },
@@ -155,12 +155,15 @@ export const confirmUserSchema: FastifySchema = {
     description:
         "After email token comfirmation all new user will continue to fill out the rest of the registration form",
     tags: ["user"],
+    headers: {
+        authorization: {type: "string"}
+    },
     params: {
         ...paramsSchema,
     },
-    body: {
-        ...userExtendedSchema,
-    },
+    // body: {
+    //     ...userExtendedSchema,
+    // },
     response: {
         201: {
             ...replySchema
