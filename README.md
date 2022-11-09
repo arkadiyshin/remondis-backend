@@ -60,7 +60,7 @@ do not add dot(.) at the end of subject
 
 ---
 
-## documentations
+## documentation
 
 1. Swagger: http://localhost:[APP_PORT]/docs/static/index.html
 * check REST API endpoints and **test it!**
