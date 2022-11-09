@@ -50,7 +50,7 @@ export const caseUserSchema = {
   $id: "caseUser",
   type: "object",
   properties: {
-    user_id: { type: "string" },
+    user_id: { type: "integer" },
   },
   required: ["user_id"],
 } as const;
