@@ -18,7 +18,7 @@ export const caseExtendSchema = {
   properties: {
     client_first_name: { type: ["string", "null"] },
     client_last_name: { type: ["string", "null"] },
-    type_of_property: { type: ["string", "null"] },
+    type_of_property_id: { type: ["string", "null"] },
     floor: { type: "integer" },
     elevator: { type: "integer" },
     squaremeters: { type: "integer" },
