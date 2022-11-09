@@ -1,13 +1,13 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
-import { SMTP_SERVER, SMTP_PORT, SMTP_USER, SMTP_PASS} from "../configuration.js"
-import nodemailer from "nodemailer";
+import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS} from "../configuration.js"
+import nodemailer, { TransportOptions } from "nodemailer";
 
 
 const transportPlugin: FastifyPluginAsync = fp(async (server, options) => {
     
     const transporter = nodemailer.createTransport({
-        host: SMTP_SERVER,
+        host: SMTP_HOST,
         port: SMTP_PORT,
         secure: (SMTP_PORT === 465), // true for 465, false for other ports
         auth: {
