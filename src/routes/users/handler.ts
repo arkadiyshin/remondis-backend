@@ -62,8 +62,23 @@ export const createUserHandler: RouteHandler<{
                 email: email_address
             }
         })
+
         //here should be sending token by email
-        reply.send({ success: true, message: 'User created' })
+        const msg = {
+            to: email_address, // Change to your recipient
+            from: 'noreplay.remondis@gmail.com', // Change to your verified sender
+            subject: 'confirm email',
+            text: `click here: ${token}`,
+            html: `<strong>click here: ${token}</strong>`,
+        }
+
+        try {
+            const result = await req.server.sgMail.send(msg);
+            reply.send({ success: true, message: 'Email sended'})
+        } catch (error) {
+            reply.send({ success: false, message: 'Email not sended' })
+        }
+        
     }
 }
 
@@ -164,7 +179,7 @@ export const loginUserHandler: RouteHandler<{
             username: username
         }
     })
-    
+
     if (!findUser) {
         reply.send({ success: false, message: 'User undefined' })
     } else {
