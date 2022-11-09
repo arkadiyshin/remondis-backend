@@ -2,6 +2,12 @@
 
 ---
 
+## general information
+
+
+
+---
+
 ## tech stack
 
 1. **_typescript_**
@@ -16,6 +22,8 @@
 * `@prisma/client`
 * `prisma-docs-generator`
 * `prisma-erd-generator`
+
+4. **_@sendgrid/mail_**
 
 ---
 
@@ -34,13 +42,17 @@
 > `<type>(<scope>): <subject>`
 
 * `<type>` - the type of changes. Should be one of:
-> * feat - some feature development
-> * fix - bug fix
-> * docs - changes in documentation
-> * style - formatting changes
-> * refactor - changes those do not fix a bug or implement a feature. Simple refactoring
-> * test - changes to tests or addition of new ones
-> * chore - any other changes, not affecting code
+> * feat - a new feature 
+> * fix - a bug fix
+> * docs - documentation only changes 
+> * style - changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) 
+> * refactor - a code change that neither fixes a bug nor adds a feature 
+> * perf - a code change that improves performance 
+> * test - adding missing tests or correcting existing tests
+> * build - changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm) 
+> * ci - changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs) 
+> * chore - other changes that don't modify src or test files 
+> * revert - reverts a previous commit 
 
 * `<scope>` - here you define the scope of changes. For example: featureA, buildConfig, or any other scope you can think of.
 * `<subject>` - there are different methodologies to write the subject, but the main rules are as follows:
