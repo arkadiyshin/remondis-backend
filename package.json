@@ -12,12 +12,16 @@
     "start": "node dist/server.js",
     "dev": "nodemon dist/server.js",
     "commitmsg": "validate-commit-msg",
+    "commit": "git-cz",
+    "prepare": "husky install"
   },
   "config": {
     "validate-commit-msg": {
-      
       "types": "conventional-commit-types"
     },
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "repository": {
     "type": "git",
@@ -43,8 +47,10 @@
     "@mermaid-js/mermaid-cli": "^9.1.7",
     "@types/node": "^18.8.5",
     "@types/nodemailer": "^6.4.6",
+    "commitizen": "^4.2.5",
+    "cz-conventional-changelog": "^3.3.0",
     "dotenv": "^16.0.3",
-    "husky": "^8.0.2",
+    "husky": "^8.0.0",
     "json-schema-to-ts": "^2.5.5",
     "nodemon": "^2.0.20",
     "pino-pretty": "^9.1.1",
