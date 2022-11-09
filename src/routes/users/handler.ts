@@ -6,8 +6,7 @@ export const getUsersHandler: RouteHandler<{
     Reply: ReplyList
 }> = async function (req, reply) {
 
-    const { role } = req.query;
-    console.log(req.query);
+    const { role } = req.query;    
     const userList = await req.server.prisma.user.findMany();
     reply.send({ users: userList })
 }
@@ -133,3 +132,18 @@ export const forgotPassHandler: RouteHandler = async function (req, reply) {
     reply.send('ok')
 }
 
+export const deleteUserHandler: RouteHandler<{
+    Params: Params;
+    Reply: Reply;
+}> = async function (req, reply) {
+
+    const {user_id} = req.params;
+    const id = parseInt(user_id);
+
+    const deleteUser = await req.server.prisma.user.delete({
+        where: {
+            id: id
+        }
+    })
+    reply.send({success: true, message: 'User deleted'})
+}
