@@ -43,6 +43,8 @@ export const addCaseHandler: RouteHandler<{
   Body: BodyNew;
   Reply: Reply;
 }> = async function (req, reply) {
+  console.log(req.body);
+
   const newCase = await req.server.prisma.case.create({
     data: {
       ...req.body,
@@ -71,7 +73,7 @@ export const updateCaseHandler: RouteHandler<{
       ...req.body,
     },
     where: {
-      case_id: id,
+      id: id,
     },
   });
   if (changedCase)
@@ -82,14 +84,14 @@ export const updateCaseHandler: RouteHandler<{
 };
 
 export const changeCaseHandler: RouteHandler<{
-  Body: BodyNew & BodyChange;
+  Body: BodyChange;
   Params: Params;
 }> = async function (req, reply) {
   const { case_id } = req.params;
   const id = parseInt(case_id);
   const changedCase = await req.server.prisma.case.update({
     where: {
-      case_id: id,
+      id: id,
     },
     data: {
       ...req.body,
