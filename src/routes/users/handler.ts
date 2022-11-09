@@ -1,10 +1,6 @@
 import { type RouteHandler } from 'fastify'
 import { UserNotFound, Params, Querystring, BodyNew, BodyChange, Reply, ReplyList } from './schema'
 
-
-
-
-
 export const getUsersHandler: RouteHandler<{
     Querystring: Querystring
     Reply: ReplyList
@@ -38,9 +34,32 @@ export const getUserHandler: RouteHandler<{
 export const createUserHandler: RouteHandler <{
     Body: BodyNew;
     Reply: Reply;
-}> = async function (req, reply) {
-    
-    const token = await req.server.jwt.sign({sub: req.body.email_address})
+}> = async function (req, reply) {    
+    const {email_address} = req.body;  
+    const userFind = await req.server.prisma.user.findFirst({
+        where: {
+            email: email_address
+        }
+    })
+    if (userFind?.hash_password){
+        reply.code(300).send({success: false, message: "User already exist" })
+    } else {
+    const token = await req.server.jwt.sign({sub: email_address})   
+    const userToken = await req.server.prisma.user.upsert({
+        create: {            
+            email: email_address || "",
+            token: token
+        },
+        update: {            
+            token: token
+        },
+        where : {
+            email: email_address
+        }
+    })
+    //here should be sending token by email
+    reply.send({success: true, message: 'User created'}) 
+    }
 }
 
 export const confirmedUserHandler: RouteHandler = async function (req, reply) {

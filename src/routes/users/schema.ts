@@ -15,10 +15,10 @@ export const userExtendedSchema = {
     type: "object",
     properties: {
         id: { type: "integer" },
-        username: { type: "string" },
+        username: { type: ["string","null"] },
         //password: { type: "string", format: "password" },
         ...{ ...userNewSchema.properties },
-        role: { type: "string" },
+        role: { type: ["string", "null"] },
     },
 } as const;
 
@@ -27,7 +27,7 @@ export const userSchema = {
     type: "object",
     properties: {
         ...{ ...userExtendedSchema.properties },
-        state: { type: "string" },
+        state: { type: ["string", "null"] },
         created_time: { type: "string" },
         confirmed_time: { type: "string" },
     },
