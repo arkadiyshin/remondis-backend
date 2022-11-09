@@ -15,10 +15,10 @@ export const userExtendedSchema = {
     type: "object",
     properties: {
         id: { type: "integer" },
-        username: { type: "string" },
-        //password: { type: "string", format: "password" },
+        username: { type: ["string","null"] },        
+        password: { type: "string", format: "password" },
         ...{ ...userNewSchema.properties },
-        role: { type: "string" },
+        role: { type: ["string", "null"] },
     },
 } as const;
 
@@ -27,9 +27,18 @@ export const userSchema = {
     type: "object",
     properties: {
         ...{ ...userExtendedSchema.properties },
-        state: { type: "string" },
+        state: { type: ["string", "null"] },
         created_time: { type: "string" },
         confirmed_time: { type: "string" },
+    },
+} as const;
+
+export const userLoginSchema = {
+    $id: "userLogin",
+    type: "object",
+    properties: {
+        username: { type: ["string","null"] },        
+        password: { type: "string", format: "password" },
     },
 } as const;
 
@@ -83,11 +92,13 @@ const replyListSchema = {
     additionalProperties: false
 } as const
 
+
 export type UserNotFound = FromSchema<typeof userNotFoundSchema>
 export type Params = FromSchema<typeof paramsSchema>
 export type Querystring = FromSchema<typeof querystringSchema>
 export type BodyNew = FromSchema<typeof userNewSchema>
 export type BodyChange = FromSchema<typeof userExtendedSchema>
+export type BodyLogin = FromSchema<typeof userLoginSchema>
 export type Reply = FromSchema<
     typeof replySchema,
     { references: [typeof userSchema] }
@@ -155,12 +166,15 @@ export const confirmUserSchema: FastifySchema = {
     description:
         "After email token comfirmation all new user will continue to fill out the rest of the registration form",
     tags: ["user"],
+    headers: {
+        authorization: {type: "string"}
+    },
     params: {
         ...paramsSchema,
     },
-    body: {
-        ...userExtendedSchema,
-    },
+    // body: {
+    //     ...userExtendedSchema,
+    // },
     response: {
         201: {
             ...replySchema
@@ -260,6 +274,24 @@ export const deleteUserSchema: FastifySchema = {
     },
     response: {
         204: {
+            ...replySchema
+        },
+        404: {
+            ...userNotFoundSchema
+        }
+    },
+};
+//login user
+
+export const loginUserSchema: FastifySchema = {
+    summary: "login user",
+    description: "login user",
+    tags: ["user"],
+    body: {
+        ...userLoginSchema.properties
+    },
+    response:{
+        200: {
             ...replySchema
         },
         404: {

@@ -12,8 +12,7 @@ import type {
 export const getCasesHandler: RouteHandler<{
   Querystring: Querystring;
   Reply: ReplyList;
-}> = async function (req, reply) {
-  //console.log(req.query)
+}> = async function (req, reply) {  
 
   const cases = await req.server.prisma.case.findMany();
   reply.send({ cases: cases });
@@ -23,6 +22,7 @@ export const getCaseHandler: RouteHandler<{
   Params: Params;
   Reply: Reply | CaseNotFound;
 }> = async function (req, reply) {
+
   const { case_id } = req.params;
   const id = parseInt(case_id);
 
