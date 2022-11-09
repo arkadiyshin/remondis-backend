@@ -32,6 +32,7 @@ inactive inactive
     DateTime assigned_at  "nullable"
     DateTime agreeded_at  "nullable"
     String client_first_name  "nullable"
+    String client_last_name  "nullable"
     String client_email  
     String client_phone  
     String address  
