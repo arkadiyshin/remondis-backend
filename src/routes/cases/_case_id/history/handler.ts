@@ -1,6 +1,20 @@
-import { FastifyReply, FastifyRequest, type RouteHandler } from "fastify";
+import { type RouteHandler } from "fastify";
+import type { Params, ReplyList } from './schema'
 
+export const getCaseHistoryHandler: RouteHandler<{
+    Params: Params
+    Reply: ReplyList
+}> = async function (req, reply) {
 
-export const getCaseHistoryHandler: RouteHandler<{}> = async function (req, reply) {
-    reply.code(200).send('Here will be history')
+    const { case_id } = req.params;
+    const id = parseInt(case_id);
+
+    const records = await req.server.prisma.caseHistory.findMany({
+        where: {
+            case_id: id,
+        }
+    });
+    reply
+        .code(200)
+        .send({ success: true, message: "", casesHistory: records });
 };
