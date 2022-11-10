@@ -31,6 +31,7 @@ app.register(autoLoad, {
 
 app.register(autoLoad, {
   dir: join(__dirname, "routes"),
+  routeParams: true
 });
 
 

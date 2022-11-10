@@ -14,7 +14,7 @@ import {
     acceptCaseSchema,
     readyCaseSchema,
     quoteCaseOpts,
-    closeCaseOpts
+    closeCaseOpts,
 } from './schema.js'
 
 import {
@@ -29,8 +29,10 @@ import {
     acceptCaseHandler,
     readyCaseHandler,
     quoteCaseHandler,
-    closeCaseHandler
+    closeCaseHandler,
+
 } from './handler.js'
+
 
 export default async (app: FastifyInstance) => {
     
