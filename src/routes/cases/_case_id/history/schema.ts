@@ -17,19 +17,31 @@ export const caseHistorySchema = {
     },
 } as const;
 
-const replyHistorySchema = {
+const paramsSchema = {
+    type: "object",
+    required: ["case_id"],
+    properties: {
+        case_id: { type: "string" },
+    },
+    additionalProperties: false,
+} as const;
+
+const replySchema = {
     type: "object",
     properties: {
-        cases: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        casesHistory: {
             type: "array",
-            case: { $ref: "caseHistory#" },
+            caseHistory: { $ref: "caseHistory#" },
         },
     },
     additionalProperties: false,
 } as const;
 
-export type ReplyHistoryList = FromSchema<
-    typeof replyHistorySchema,
+export type Params = FromSchema<typeof paramsSchema>;
+export type ReplyList = FromSchema<
+    typeof replySchema,
     { references: [typeof caseHistorySchema] }
 >;
 
@@ -38,6 +50,7 @@ export const getCaseHistorySchema: FastifySchema = {
     description:
         "Get list of history",
     tags: ["case"],
+    params: paramsSchema,
     response: {
         200: {
             ...caseHistorySchema,

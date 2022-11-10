@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest, type RouteHandler } from "fastify";
+import { type RouteHandler } from "fastify";
 import type { Params, ParamsReq, Querystring, Body, BodyNew, Reply, ReplyList, CaseItemNotFound } from './schema'
 
 export const getCaseItemsHandler: RouteHandler<{
@@ -22,7 +22,7 @@ export const getCaseItemsHandler: RouteHandler<{
 
 export const getCaseItemHandler: RouteHandler<{
     Params: Params
-    Reply: Reply
+    Reply: Reply | CaseItemNotFound
 }> = async function (req, reply) {
 
     const { case_id, room } = req.params;
@@ -53,7 +53,7 @@ export const getCaseItemHandler: RouteHandler<{
 export const addCaseItemHandler: RouteHandler<{
     Params: Params
     Body: BodyNew
-    Reply: Reply
+    Reply: Reply | CaseItemNotFound
 }> = async function (req, reply) {
 
     const { case_id } = req.params;
@@ -78,7 +78,7 @@ export const addCaseItemHandler: RouteHandler<{
 export const updateCaseItemHandler: RouteHandler<{
     Params: Params
     Body: Body
-    Reply: Reply
+    Reply: Reply | CaseItemNotFound
 }> = async function (req, reply) {
 
     const { case_id, room } = req.params;
@@ -108,7 +108,7 @@ export const updateCaseItemHandler: RouteHandler<{
 
 export const deleteCaseItemHandler: RouteHandler<{
     Params: Params
-    Reply: Reply
+    Reply: Reply | CaseItemNotFound
 }> = async function (req, reply) {
     
     const { case_id, room } = req.params;
