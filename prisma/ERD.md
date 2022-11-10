@@ -57,7 +57,6 @@ inactive inactive
   
 
   CaseItem {
-    Int id PK 
     Int room  
     String room_title  "nullable"
     String description  "nullable"

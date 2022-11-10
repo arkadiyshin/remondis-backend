@@ -92,13 +92,15 @@ model CaseState {
 }
 
 model CaseItem {
-  id          Int     @id @default(autoincrement())
+  //id          Int     @id @default(autoincrement())
   case_id     Int
   Case        Case    @relation(fields: [case_id], references: [id])
   room        Int     @default(0)
   room_title  String? @db.VarChar(20)
   description String?
   quantity    Int     @default(0)
+
+  @@unique(fields: [case_id, room], name: "caseRoom")
 }
 
 model CasePhoto {
@@ -148,5 +150,5 @@ model TransitionAccess {
   transition_id Int
   Transition    Transition @relation(fields: [transition_id], references: [id])
 
-  @@unique([role, transition_id])
+  @@unique(fields: [role, transition_id], name: "roleTransition")
 }
