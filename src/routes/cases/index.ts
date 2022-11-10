@@ -8,13 +8,13 @@ import {
     postCaseSchema,
     updateCaseSchema,
     changeCaseSchema,
-    deleteCaseSchema,
+    //deleteCaseSchema,
     assignCaseSchema,
     declineCaseSchema,
     acceptCaseSchema,
     readyCaseSchema,
     quoteCaseOpts,
-    closeCaseOpts
+    closeCaseOpts,
 } from './schema.js'
 
 import {
@@ -22,15 +22,17 @@ import {
     getCaseHandler,
     addCaseHandler,
     updateCaseHandler,
-    deleteCaseHandler,
+    //deleteCaseHandler,
     changeCaseHandler,
     assignCaseHandler,
     declineCaseHandler,
     acceptCaseHandler,
     readyCaseHandler,
     quoteCaseHandler,
-    closeCaseHandler
+    closeCaseHandler,
+
 } from './handler.js'
+
 
 export default async (app: FastifyInstance) => {
     
@@ -43,7 +45,7 @@ export default async (app: FastifyInstance) => {
     app.post('/', { schema: postCaseSchema }, addCaseHandler)
     app.put('/:case_id', { schema: updateCaseSchema }, updateCaseHandler)
     app.patch('/:case_id', { schema: changeCaseSchema }, changeCaseHandler)
-    app.delete('/:case_id', { schema: deleteCaseSchema }, deleteCaseHandler)
+    //app.delete('/:case_id', { schema: deleteCaseSchema }, deleteCaseHandler)
 
     app.patch('/:case_id/assign', { schema: assignCaseSchema }, assignCaseHandler)
     app.patch('/:case_id/decline', { schema: declineCaseSchema }, declineCaseHandler)

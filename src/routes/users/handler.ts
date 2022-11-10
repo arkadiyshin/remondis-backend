@@ -1,6 +1,8 @@
 import { type RouteHandler } from 'fastify'
 import bcrypt from "bcrypt";
-import { UserNotFound, Params, Querystring, BodyNew, BodyChange, Reply, ReplyList, BodyLogin } from './schema'
+import type { UserNotFound, Params, Querystring, BodyNew, BodyChange, Reply, ReplyList, BodyLogin } from './schema'
+import type { Role } from '@prisma/client'; 
+
 
 
 
@@ -132,7 +134,7 @@ export const updateUserHandler: RouteHandler<{
         },
         data: {
             username: username,
-            role: role,
+            role: role as Role,
             email: email_address,
             hash_password: hash_password,
         }

@@ -1,9 +1,10 @@
-import { type RouteHandler } from "fastify";
+import { FastifyReply, FastifyRequest, type RouteHandler } from "fastify";
 import type {
   Params,
   Querystring,
   BodyNew,
   BodyChange,
+  BodyStatus,
   Reply,
   ReplyList,
   CaseNotFound,
@@ -12,7 +13,7 @@ import type {
 export const getCasesHandler: RouteHandler<{
   Querystring: Querystring;
   Reply: ReplyList;
-}> = async function (req, reply) {  
+}> = async function (req, reply) {
 
   const cases = await req.server.prisma.case.findMany();
   reply.send({ cases: cases });
@@ -28,7 +29,7 @@ export const getCaseHandler: RouteHandler<{
 
   const findedCase = await req.server.prisma.case.findUnique({
     where: {
-      case_id: id,
+      id: id,
     },
   });
 
@@ -60,7 +61,7 @@ export const addCaseHandler: RouteHandler<{
 };
 
 export const updateCaseHandler: RouteHandler<{
-  Body: BodyChange;
+  Body: BodyNew;
   Params: Params;
 }> = async function (req, reply) {
   const { case_id } = req.params;
@@ -104,7 +105,7 @@ export const changeCaseHandler: RouteHandler<{
   else reply.code(404).send({ success: false, message: "Case is not found" });
 };
 
-export const deleteCaseHandler: RouteHandler<{
+/* export const deleteCaseHandler: RouteHandler<{
   Params: Params;
 }> = async function (req, reply) {
   const { case_id } = req.params;
@@ -117,22 +118,46 @@ export const deleteCaseHandler: RouteHandler<{
   if (deletedCase)
     reply.code(200).send({ success: true, message: "Case is deleted" });
   else reply.code(404).send({ success: false, message: "Case is not found" });
-};
+}; */
 
-const hasRights = async function (nextStateArg: number, req, reply) {
-  const { case_id } = req.params;
+const hasRights = async function (nextStateArg: number, req: FastifyRequest, reply: FastifyReply) {
+
+  const params = req.params as Params;
+  const body = req.body as BodyStatus;
+
+  const { case_id } = params;
   const id = parseInt(case_id);
+
+
   const foundCase = await req.server.prisma.case.findUnique({
     where: {
       id: id,
     },
   });
+  
+  if (!foundCase) {
+    reply.code(404).send({
+      success: false,
+      message: "Case not found",
+    });
+    return; // use return for types error reason
+  }
+
   const user = await req.server.prisma.user.findUnique({
     where: {
-      id: req.body.user_id,
+      id: body.user_id,
     },
   });
-  const currentState = foundCase.state_id;
+
+  if (!user) {
+    reply.code(404).send({
+      success: false,
+      message: "User not found",
+    });
+    return; // use return for types error reason
+  }
+
+  const currentState = foundCase.state_id as number;
   const nextState = nextStateArg;
   console.log(currentState);
   console.log(nextState);
@@ -146,7 +171,7 @@ const hasRights = async function (nextStateArg: number, req, reply) {
     const transitionRights = await req.server.prisma.transitionAccess.findFirst(
       {
         where: {
-          role: user.role,
+          role: user.role!,
           transition_id: transition.id,
         },
       }
@@ -161,7 +186,7 @@ const hasRights = async function (nextStateArg: number, req, reply) {
 };
 
 export const assignCaseHandler: RouteHandler<{
-  Body: BodyChange;
+  Body: BodyStatus;
   Params: Params;
 }> = async function (req, reply) {
   const id = parseInt(req.params.case_id);
@@ -196,7 +221,7 @@ export const assignCaseHandler: RouteHandler<{
 };
 
 export const declineCaseHandler: RouteHandler<{
-  Body: BodyChange;
+  Body: BodyStatus;
   Params: Params;
 }> = async function (req, reply) {
   const id = parseInt(req.params.case_id);
@@ -229,7 +254,7 @@ export const declineCaseHandler: RouteHandler<{
 };
 
 export const acceptCaseHandler: RouteHandler<{
-  Body: BodyChange;
+  Body: BodyStatus;
   Params: Params;
 }> = async function (req, reply) {
   const id = parseInt(req.params.case_id);
@@ -262,7 +287,7 @@ export const acceptCaseHandler: RouteHandler<{
 };
 
 export const readyCaseHandler: RouteHandler<{
-  Body: BodyChange;
+  Body: BodyStatus;
   Params: Params;
 }> = async function (req, reply) {
   const id = parseInt(req.params.case_id);
@@ -295,7 +320,7 @@ export const readyCaseHandler: RouteHandler<{
 };
 
 export const quoteCaseHandler: RouteHandler<{
-  Body: BodyChange;
+  Body: BodyStatus;
   Params: Params;
 }> = async function (req, reply) {
   const id = parseInt(req.params.case_id);
@@ -328,7 +353,7 @@ export const quoteCaseHandler: RouteHandler<{
 };
 
 export const closeCaseHandler: RouteHandler<{
-  Body: BodyChange;
+  Body: BodyStatus;
   Params: Params;
 }> = async function (req, reply) {
   const id = parseInt(req.params.case_id);

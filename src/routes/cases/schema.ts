@@ -18,12 +18,12 @@ export const caseExtendSchema = {
   properties: {
     client_first_name: { type: ["string", "null"] },
     client_last_name: { type: ["string", "null"] },
-    type_of_property_id: { type: "integer" },
+    type_of_property_id: { type: ["integer", "null"] },
     floor: { type: "integer" },
     elevator: { type: "integer" },
     squaremeters: { type: "integer" },
     quantity: { type: "integer" },
-    way_to_property: { type: "string" },
+    way_to_property: { type: ["string", "null"] },
   },
 } as const;
 
@@ -46,11 +46,13 @@ export const caseSchema = {
   },
 } as const;
 
-export const caseUserSchema = {
+export const caseStatusSchema = {
   $id: "caseUser",
   type: "object",
   properties: {
     user_id: { type: "integer" },
+    inspector_id: { type: "integer" },
+    reason:  { type: "string" }
   },
   required: ["user_id"],
 } as const;
@@ -129,6 +131,7 @@ export type Params = FromSchema<typeof paramsSchema>;
 export type Querystring = FromSchema<typeof querystringSchema>;
 export type BodyNew = FromSchema<typeof caseNewSchema>;
 export type BodyChange = FromSchema<typeof caseExtendSchema>;
+export type BodyStatus = FromSchema<typeof caseStatusSchema>;
 export type Reply = FromSchema<
   typeof replySchema,
   { references: [typeof caseSchema] }
@@ -226,7 +229,7 @@ export const changeCaseSchema: FastifySchema = {
   },
 };
 
-export const deleteCaseSchema: FastifySchema = {
+/* export const deleteCaseSchema: FastifySchema = {
   summary: "Delete case by id",
   description: "Delete case by id",
   tags: ["case"],
@@ -239,7 +242,7 @@ export const deleteCaseSchema: FastifySchema = {
       success: { type: "boolean" },
     },
   },
-};
+}; */
 
 export const assignCaseSchema: FastifySchema = {
   summary: "Manager assigns case to inspector",
@@ -248,7 +251,7 @@ export const assignCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { ...caseUserSchema.properties, inspector_id: { type: "integer" } },
+  body: caseStatusSchema,
   response: {
     200: {
       ...replySchema,
@@ -266,7 +269,7 @@ export const declineCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { ...caseUserSchema.properties, reason: { type: "string" } },
+  body: caseStatusSchema,
   response: {
     200: {
       ...replySchema,
@@ -284,7 +287,7 @@ export const acceptCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { ...caseUserSchema },
+  body: caseStatusSchema,
   response: {
     200: {
       ...replySchema,
@@ -302,7 +305,7 @@ export const readyCaseSchema: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { ...caseUserSchema },
+  body: caseStatusSchema,
   response: {
     200: {
       ...replySchema,
@@ -320,7 +323,7 @@ export const quoteCaseOpts: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { ...caseUserSchema },
+  body: caseStatusSchema,
   response: {
     200: {
       ...replySchema,
@@ -338,7 +341,7 @@ export const closeCaseOpts: FastifySchema = {
   params: {
     ...paramsSchema,
   },
-  body: { ...caseUserSchema.properties, reason: { type: "string" } },
+  body: caseStatusSchema,
   response: {
     200: {
       ...replySchema,
