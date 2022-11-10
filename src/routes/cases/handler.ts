@@ -105,7 +105,7 @@ export const changeCaseHandler: RouteHandler<{
   else reply.code(404).send({ success: false, message: "Case is not found" });
 };
 
-export const deleteCaseHandler: RouteHandler<{
+/* export const deleteCaseHandler: RouteHandler<{
   Params: Params;
 }> = async function (req, reply) {
   const { case_id } = req.params;
@@ -118,7 +118,7 @@ export const deleteCaseHandler: RouteHandler<{
   if (deletedCase)
     reply.code(200).send({ success: true, message: "Case is deleted" });
   else reply.code(404).send({ success: false, message: "Case is not found" });
-};
+}; */
 
 const hasRights = async function (nextStateArg: number, req: FastifyRequest, reply: FastifyReply) {
 
@@ -157,7 +157,7 @@ const hasRights = async function (nextStateArg: number, req: FastifyRequest, rep
     return; // use return for types error reason
   }
 
-  const currentState = foundCase.state_id!;
+  const currentState = foundCase.state_id as number;
   const nextState = nextStateArg;
   console.log(currentState);
   console.log(nextState);

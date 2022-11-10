@@ -229,7 +229,7 @@ export const changeCaseSchema: FastifySchema = {
   },
 };
 
-export const deleteCaseSchema: FastifySchema = {
+/* export const deleteCaseSchema: FastifySchema = {
   summary: "Delete case by id",
   description: "Delete case by id",
   tags: ["case"],
@@ -242,7 +242,7 @@ export const deleteCaseSchema: FastifySchema = {
       success: { type: "boolean" },
     },
   },
-};
+}; */
 
 export const assignCaseSchema: FastifySchema = {
   summary: "Manager assigns case to inspector",
