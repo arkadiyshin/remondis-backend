@@ -30,13 +30,8 @@ import {
     readyCaseHandler,
     quoteCaseHandler,
     closeCaseHandler,
-    //,
 
 } from './handler.js'
-
-import {getCaseHistorySchema,} from './history/schema.js'
-import {getCaseHistoryHandler,} from './history/handler.js'
-
 
 
 export default async (app: FastifyInstance) => {
@@ -59,13 +54,4 @@ export default async (app: FastifyInstance) => {
     app.patch('/:case_id/quote', { schema: quoteCaseOpts }, quoteCaseHandler)
     app.patch('/:case_id/close', { schema: closeCaseOpts }, closeCaseHandler)
 
-    // history
-    app.get('/:case_id/history', { schema: getCaseHistorySchema }, getCaseHistoryHandler)
-
-    // items
-    // app.get('/:case_id/items', { schema: getCaseItemsSchema }, getCaseItemsHandler)
-    // app.get('/:case_id/items/:room', { schema: getCaseItemSchema }, getCaseItemHandler)
-    // app.post('/:case_id/items', { schema: postCaseItemSchema }, addCaseItemHandler)
-    // app.put('/:case_id/items/:room', { schema: updateCaseItemSchema }, updateCaseItemHandler)
-    // app.delete('/:case_id/items/:room'', { schema: deleteCaseItemSchema }, deleteCaseItemHandler)
 }
