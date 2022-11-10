@@ -1,46 +1,180 @@
 import type { FastifySchema } from "fastify";
 import { FromSchema } from "json-schema-to-ts";
 
-// history
-export const caseHistorySchema = {
-    $id: "caseHistory",
+
+export const caseItemNewSchema = {
+    $id: "caseItemNew",
     type: "object",
+    required: ['room'],
     properties: {
-        id: { type: "number" },
-        case_id: { type: "number" },
-        time: { type: "string", format: "date-time" },
-        case_state_id: { type: ["integer", "null"] },
-        case_new_state_id: { type: ["integer", "null"] },
-        user_id: { type: ["integer", "null"] },
+        room: { type: "number" },
+        room_title: { type: ["string", "null"] },
         description: { type: ["string", "null"] },
-        case_data: { type: "object" },
+        quantity: { type: ["integer"] },
     },
 } as const;
 
-const replyHistorySchema = {
+export const caseItemSchema = {
+    $id: "caseItem",
+    type: "object",
+    required: ['case_id', 'room'],
+    properties: {
+        id: { type: "number" },
+        case_id: { type: "number" },
+        ...{...caseItemNewSchema.properties},
+    },
+} as const;
+
+
+// types
+export const caseItemNotFoundSchema = {
+    $id: "caseItemNotFound",
+    type: "object",
+    required: ["success", "message"],
+    properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+    },
+    additionalProperties: false,
+} as const;
+
+const paramsSchema = {
+    type: "object",
+    required: ["case_id"],
+    properties: {
+        case_id: { type: "string" },
+        room: { type: "string" },
+    },
+    additionalProperties: false,
+} as const;
+
+const paramsReqSchema = {
+    type: "object",
+    required: ["case_id"],
+    properties: {
+        case_id: { type: "string" },
+    },
+    additionalProperties: false,
+} as const;
+
+const querystringSchema = {
     type: "object",
     properties: {
-        cases: {
+    },
+    additionalProperties: false,
+} as const;
+
+const replySchema = {
+    type: "object",
+    properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        caseItem: { $ref: "caseItem#" },
+    },
+    additionalProperties: false,
+} as const;
+
+const replyListSchema = {
+    type: "object",
+    properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        caseItems: {
             type: "array",
-            case: { $ref: "caseHistory#" },
+            caseItem: { $ref: "caseItem#" },
         },
     },
     additionalProperties: false,
 } as const;
 
-export type ReplyHistoryList = FromSchema<
-    typeof replyHistorySchema,
-    { references: [typeof caseHistorySchema] }
+export type CaseItemNotFound = FromSchema<typeof caseItemNotFoundSchema>;
+export type Params = FromSchema<typeof paramsSchema>;
+export type ParamsReq = FromSchema<typeof paramsReqSchema>;
+export type Querystring = FromSchema<typeof querystringSchema>;
+export type BodyNew = FromSchema<typeof caseItemNewSchema>;
+export type Body = FromSchema<typeof caseItemSchema>;
+export type Reply = FromSchema<
+    typeof replySchema,
+    { references: [typeof caseItemSchema] }
+>;
+export type ReplyList = FromSchema<
+    typeof replyListSchema,
+    { references: [typeof caseItemSchema] }
 >;
 
+// options
+
 export const getCaseItemsSchema: FastifySchema = {
-    summary: "Get history of case",
+    summary: "Get items of case",
     description:
-        "Get list of history",
+        "Get items of case",
     tags: ["case"],
+    params: paramsReqSchema,
     response: {
         200: {
-            ...caseHistorySchema,
+            ...replyListSchema,
+        },
+    },
+};
+
+export const getCaseItemSchema: FastifySchema = {
+    summary: "Get single item by case id and room",
+    description: "Get single item by case id and room",
+    tags: ["case"],
+    params: {
+        ...paramsSchema,
+    },
+    response: {
+        200: {
+            ...replySchema,
+        },
+        404: {
+            ...caseItemNotFoundSchema,
+        },
+    },
+};
+
+export const postCaseItemSchema: FastifySchema = {
+    summary: "Add a new item to the case",
+    description: "Add a new item to the case",
+    tags: ["case"],
+    body: caseItemNewSchema,
+    response: {
+        201: {
+            ...replySchema,
+        },
+    },
+};
+
+export const updateCaseItemSchema: FastifySchema = {
+    summary: "Update the item in the case by case id and room",
+    description: "Update the item in the case by case id and room",
+    tags: ["case"],
+    params: {
+        ...paramsSchema,
+    },
+    body: caseItemSchema,
+    response: {
+        200: {
+            ...replySchema,
+        },
+        404: {
+            ...caseItemNotFoundSchema,
+        },
+    },
+};
+
+export const deleteCaseItemSchema: FastifySchema = {
+    summary: "Delete the item in the case by case id and room",
+    description: "Delete the item in the case by case id and room",
+    tags: ["case"],
+    params: {
+        ...paramsSchema,
+    },
+    response: {
+        201: {
+            message: { type: "string" },
+            success: { type: "boolean" },
         },
     },
 };

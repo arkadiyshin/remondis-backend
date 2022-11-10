@@ -1,21 +1,31 @@
 import type { FastifyInstance } from 'fastify'
 import {
-    getCaseItemsSchema
+    getCaseItemsSchema,
+    getCaseItemSchema,
+    postCaseItemSchema,
+    updateCaseItemSchema,
+    deleteCaseItemSchema,
+    caseItemSchema,
+    caseItemNotFoundSchema,
 } from './schema.js'
 
 import {
-    getCaseItemsHandler
-
+    getCaseItemsHandler,
+    getCaseItemHandler,
+    addCaseItemHandler,
+    updateCaseItemHandler,
+    deleteCaseItemHandler,
 } from './handler.js'
 
 
 export default async (app: FastifyInstance) => {
     
-    // items
-    // 
+    app.addSchema(caseItemSchema);
+    app.addSchema(caseItemNotFoundSchema);
+    
     app.get('/', { schema: getCaseItemsSchema }, getCaseItemsHandler)
-    // app.get('/:case_id/items/:room', { schema: getCaseItemSchema }, getCaseItemHandler)
-    // app.post('/:case_id/items', { schema: postCaseItemSchema }, addCaseItemHandler)
-    // app.put('/:case_id/items/:room', { schema: updateCaseItemSchema }, updateCaseItemHandler)
-    // app.delete('/:case_id/items/:room'', { schema: deleteCaseItemSchema }, deleteCaseItemHandler)
+    app.get('/:room', { schema: getCaseItemSchema }, getCaseItemHandler)
+    app.post('/', { schema: postCaseItemSchema }, addCaseItemHandler)
+    app.put('/:room', { schema: updateCaseItemSchema }, updateCaseItemHandler)
+    app.delete('/:room', { schema: deleteCaseItemSchema }, deleteCaseItemHandler)
 }
