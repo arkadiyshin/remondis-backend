@@ -1,7 +1,7 @@
 import { type RouteHandler } from 'fastify'
 import bcrypt from "bcrypt";
 import type { UserNotFound, Params, Querystring, BodyNew, BodyChange, Reply, ReplyList, BodyLogin } from './schema'
-import type { Role } from '@prisma/client'; 
+import { Role } from '@prisma/client'; 
 
 
 
@@ -10,8 +10,22 @@ export const getUsersHandler: RouteHandler<{
     Querystring: Querystring
     Reply: ReplyList
 }> = async function (req, reply) {
+    const where: any = {} ;
+    for (const [key,value] of Object.entries(req.query)) {
+        where[key] = value
+    }       
+    const userList = await req.server.prisma.user.findMany({
+        select:{
+            id: true,
+            email: true,
+            username: true,
+            role: true,
+            state: true,            
+        },
+        where: where
+        
+    });
 
-    const userList = await req.server.prisma.user.findMany();
     reply.send({ users: userList })
 }
 
@@ -122,12 +136,7 @@ export const updateUserHandler: RouteHandler<{
 
     const { id, username, email_address, role, password } = req.body
     const hash_password = await bcrypt.hash(password!, 13);
-    console.log(hash_password);
-    const userFind = await req.server.prisma.user.findFirst({
-        where: {
-            id: id
-        }
-    })
+    console.log(hash_password);  
     const updateUser = await req.server.prisma.user.update({
         where: {
             id: id
@@ -139,36 +148,110 @@ export const updateUserHandler: RouteHandler<{
             hash_password: hash_password,
         }
     })
-
+    
+    if (updateUser) {
+        const {hash_password, token, ...sendUser} = updateUser;
+    reply
+      .code(200)
+      .send({ success: true, message: "User changed", user: sendUser}); 
+    } else {
+         reply.code(404).send({ success: false, message: "User not found" });
+    }
 }
 
-// export const changeUserRoleHandler: RouteHandler = async function (req, reply) {
-//     reply.send('ok')
-// }
-
-export const setNewPassHandler: RouteHandler = async function (req, reply) {
-    reply.send('ok')
-}
-
-export const forgotPassHandler: RouteHandler = async function (req, reply) {
-    reply.send('ok')
-}
-
-export const deleteUserHandler: RouteHandler<{
+export const forgotPassHandler: RouteHandler<{
+    Body: BodyChange;
     Params: Params;
     Reply: Reply;
 }> = async function (req, reply) {
-
     const { user_id } = req.params;
     const id = parseInt(user_id);
-
-    const deleteUser = await req.server.prisma.user.delete({
+    const {email_address} = req.body;
+    const userFind = await req.server.prisma.user.findFirst({
         where: {
-            id: id
+            email: email_address
         }
     })
-    reply.send({ success: true, message: 'User deleted' })
+    if(!userFind){ 
+        reply.code(404).send({ success: false, message: "User not found" })
+    } else {
+        const token = await req.server.jwt.sign({ sub: email_address })
+        const userToken = await req.server.prisma.user.update({            
+            data: {
+                token: token
+            },
+            where: {
+                id: id
+            }
+    });
+    // should send email where user should press on button and go to the page for changing password
+    const msg = {
+        to: email_address, // Change to your recipient
+        from: 'noreplay.remondis@gmail.com', // Change to your verified sender
+        subject: 'forgot password',
+        text: `click here: ${token}`,
+        html: `<strong>click here: ${token}</strong>`,
+    }
+
+    try {
+        const result = await req.server.sgMail.send(msg);
+        reply.send({ success: true, message: 'Email sended'})
+    } catch (error) {
+        reply.send({ success: false, message: 'Email not sended' })
+    }
+
 }
+}
+
+// export const setNewPassHandler: RouteHandler<{
+//     Params: Params;
+//     Reply: Reply;
+//     Body: BodyChange;
+// }> = async function (req, reply) {
+//     const { user_id } = req.params;
+//     const id = parseInt(user_id);
+//     const { password } = req.body;
+//     if (req.headers.authorization === undefined) {
+//         console.error('Token undefined')
+//     } else {
+//         const [method, token] = req.headers.authorization.split(" ")
+
+//         if (method === "Bearer") {
+//             const findToken = await req.server.prisma.user.findFirst({
+//                 where: {
+//                     id: id
+//                 }
+//             })
+//             if (findToken?.token === token) {
+//                 reply.send({ success: true, message: 'User verified' })
+
+//             }
+//             else {
+//                 reply.send({ success: false, message: 'Invalid token' })
+//             }
+
+//         } else {
+//             reply.send({ success: true, message: 'Invalid method' })
+//         }
+//     }
+    
+// }
+
+// export const deleteUserHandler: RouteHandler<{
+//     Params: Params;
+//     Reply: Reply;
+// }> = async function (req, reply) {
+
+//     const { user_id } = req.params;
+//     const id = parseInt(user_id);
+
+//     const deleteUser = await req.server.prisma.user.delete({
+//         where: {
+//             id: id
+//         }
+//     })
+//     reply.send({ success: true, message: 'User deleted' })
+// }
 
 export const loginUserHandler: RouteHandler<{
     Body: BodyLogin;
