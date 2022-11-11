@@ -15,7 +15,12 @@
     "scope": {
         "required": true,
         "allowed": [
-            "*"
+            "general",
+            "docs",
+            "user",
+            "case",
+            "appointment",
+            "email"
         ],
         "validate": true,
         "multiple": false
