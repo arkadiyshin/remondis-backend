@@ -104,7 +104,7 @@ inactive inactive
     Case o{--|o User : "Inspector"
     CaseItem o{--|| Case : "Case"
     CasePhoto o{--|| Case : "Case"
-    Appointment o{--|| Case : "Case"
+    Appointment o|--|| Case : "Case"
     CaseHistory o{--|| Case : "Case"
     CaseHistory o{--|| CaseState : "CaseState"
     CaseHistory o{--|| CaseState : "CaseNewState"

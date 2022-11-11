@@ -71,7 +71,7 @@ model Case {
   Inspector           User?           @relation("Inspector", fields: [inspector_id], references: [id])
   CaseItem            CaseItem[]
   CasePhoto           CasePhoto[]
-  Appointment         Appointment[]
+  Appointment         Appointment?
   CaseHistory         CaseHistory[]
 }
 
