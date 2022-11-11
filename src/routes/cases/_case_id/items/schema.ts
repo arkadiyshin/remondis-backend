@@ -5,9 +5,7 @@ import { FromSchema } from "json-schema-to-ts";
 export const caseItemNewSchema = {
     $id: "caseItemNew",
     type: "object",
-    required: ['room'],
     properties: {
-        room: { type: "number" },
         room_title: { type: ["string", "null"] },
         description: { type: ["string", "null"] },
         quantity: { type: ["integer"] },
@@ -19,8 +17,8 @@ export const caseItemSchema = {
     type: "object",
     required: ['case_id', 'room'],
     properties: {
-        id: { type: "number" },
         case_id: { type: "number" },
+        room: { type: "number" },
         ...{...caseItemNewSchema.properties},
     },
 } as const;
