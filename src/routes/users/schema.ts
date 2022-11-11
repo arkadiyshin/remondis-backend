@@ -66,7 +66,7 @@ const paramsSchema = {
 const querystringSchema = {
     type: 'object',
     properties: {
-        role: { type: "string" },
+        role: { type: ["string", "null"] },
     },
     additionalProperties: false
 } as const
