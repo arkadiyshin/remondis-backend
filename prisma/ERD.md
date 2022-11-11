@@ -73,7 +73,6 @@ inactive inactive
   
 
   Appointment {
-    Int id PK 
     DateTime date  
     DateTime time_from  
     DateTime time_to  
@@ -105,7 +104,7 @@ inactive inactive
     Case o{--|o User : "Inspector"
     CaseItem o{--|| Case : "Case"
     CasePhoto o{--|| Case : "Case"
-    Appointment o{--|| Case : "Case"
+    Appointment o|--|| Case : "Case"
     CaseHistory o{--|| Case : "Case"
     CaseHistory o{--|| CaseState : "CaseState"
     CaseHistory o{--|| CaseState : "CaseNewState"

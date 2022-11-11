@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest, type RouteHandler } from "fastify";
 import type {
   Params,
+  ParamsUserId,
   Querystring,
   BodyNew,
   BodyChange,
@@ -8,7 +9,7 @@ import type {
   Reply,
   ReplyList,
   CaseNotFound,
-} from "./schema";
+} from "./schema.js";
 
 export const getCasesHandler: RouteHandler<{
   Querystring: Querystring;
@@ -134,7 +135,7 @@ const hasRights = async function (nextStateArg: number, req: FastifyRequest, rep
       id: id,
     },
   });
-  
+
   if (!foundCase) {
     reply.code(404).send({
       success: false,
@@ -383,4 +384,51 @@ export const closeCaseHandler: RouteHandler<{
   } else {
     reply.code(403).send({ success: false, message: "You do not have rights" });
   }
+};
+
+export const getCasesToDoHandler: RouteHandler<{
+  Params: ParamsUserId
+  Reply: ReplyList;
+}> = async function (req, reply) {
+
+  const { user_id } = req.params;
+  const id = parseInt(user_id);
+
+  const user = await req.server.prisma.user.findUnique({
+    where: {
+      id: id
+    }
+  })
+
+  if (!user) {
+    reply
+      .code(404)
+      .send({ success: false, message: 'User not found' });
+    return;
+  }
+
+  const role = user.role
+  // hardcode!!
+  const managerToDoStates = [1, 2, 4, 5];
+  const inspectorToDoStates = [2, 4];
+
+  const roleCond = (role === "manager" ?
+    { manager_id: id } :
+    { inspector_id: id });
+  const cases = await req.server.prisma.case.findMany({
+    where: {
+      AND: [{ ...roleCond },
+      {
+        OR: [{ state_id: { in: (role === 'manager' ? managerToDoStates : inspectorToDoStates) } },
+        { AND: [{ state_id: 3 }, { Appointment: null }] },
+        { AND: [{ state_id: 3 }, { Appointment: { is: { date: { lte: new Date() } } } }] }
+        ]
+      }]
+    },
+    include: {
+      Appointment: true,
+    },
+  })
+
+  reply.send({ success: true, message: 'ToDo list', cases });
 };

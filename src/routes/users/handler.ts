@@ -4,8 +4,6 @@ import type { UserNotFound, Params, Querystring, BodyNew, BodyChange, Reply, Rep
 import { Role } from '@prisma/client'; 
 
 
-
-
 export const getUsersHandler: RouteHandler<{
     Querystring: Querystring
     Reply: ReplyList
@@ -26,7 +24,7 @@ export const getUsersHandler: RouteHandler<{
         
     });
 
-    reply.send({ users: userList })
+    reply.send({ success: true, message: "List of users", users: userList })
 }
 
 export const getUserHandler: RouteHandler<{

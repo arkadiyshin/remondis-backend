@@ -57,20 +57,6 @@ export const caseStatusSchema = {
   required: ["user_id"],
 } as const;
 
-/*
-// case item
-export const caseItemSchema = {
-    $id: "caseItem",
-    type: "object",
-    properties: {
-        room: { type: "integer" },
-        description: { type: "string" },
-        room_title: { type: "string" },
-        photo_link: { type: "string" },
-        quantity: { type: "integer" }
-    },
-} as const
-*/
 
 // types
 export const caseNotFoundSchema = {
@@ -89,6 +75,15 @@ const paramsSchema = {
   required: ["case_id"],
   properties: {
     case_id: { type: "string" },
+  },
+  additionalProperties: false,
+} as const;
+
+const paramsUserIdSchema = {
+  type: "object",
+  required: ["user_id"],
+  properties: {
+    user_id: { type: "string" },
   },
   additionalProperties: false,
 } as const;
@@ -118,9 +113,11 @@ const replySchema = {
 const replyListSchema = {
   type: "object",
   properties: {
+    success: { type: "boolean" },
+    message: { type: "string" },
     cases: {
       type: "array",
-      case: { $ref: "case#" },
+      cases: { $ref: "case#" },
     },
   },
   additionalProperties: false,
@@ -128,6 +125,7 @@ const replyListSchema = {
 
 export type CaseNotFound = FromSchema<typeof caseNotFoundSchema>;
 export type Params = FromSchema<typeof paramsSchema>;
+export type ParamsUserId = FromSchema<typeof paramsUserIdSchema>;
 export type Querystring = FromSchema<typeof querystringSchema>;
 export type BodyNew = FromSchema<typeof caseNewSchema>;
 export type BodyChange = FromSchema<typeof caseExtendSchema>;
@@ -316,7 +314,7 @@ export const readyCaseSchema: FastifySchema = {
   },
 };
 
-export const quoteCaseOpts: FastifySchema = {
+export const quoteCaseSchema: FastifySchema = {
   summary: "Manager sends quote to household owner",
   description: "Manager sends quote to household owner",
   tags: ["case"],
@@ -334,7 +332,7 @@ export const quoteCaseOpts: FastifySchema = {
   },
 };
 
-export const closeCaseOpts: FastifySchema = {
+export const closeCaseSchema: FastifySchema = {
   summary: "Manager closes case",
   description: "Manager closes case",
   tags: ["case"],
@@ -348,6 +346,21 @@ export const closeCaseOpts: FastifySchema = {
     },
     403: {
       ...caseNotFoundSchema,
+    },
+  },
+};
+
+export const getCasesToDoSchema: FastifySchema = {
+  summary: "Get TODO list",
+  description:
+    "Get TODO list",
+  tags: ["case"],
+  params: {
+    ...paramsUserIdSchema
+  },
+  response: {
+    200: {
+      ...replyListSchema,
     },
   },
 };

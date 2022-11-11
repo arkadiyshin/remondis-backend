@@ -84,6 +84,8 @@ const replySchema = {
 const replyListSchema = {
     type: 'object',
     properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
         users: {
             type: 'array',
             users: { $ref: 'user#' }
@@ -262,7 +264,6 @@ export const forgotPassSchema: FastifySchema = {
         }
     },
 };
-
 
 // delete user options
 export const deleteUserSchema: FastifySchema = {

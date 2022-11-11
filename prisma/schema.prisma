@@ -71,7 +71,7 @@ model Case {
   Inspector           User?           @relation("Inspector", fields: [inspector_id], references: [id])
   CaseItem            CaseItem[]
   CasePhoto           CasePhoto[]
-  Appointment         Appointment[]
+  Appointment         Appointment?
   CaseHistory         CaseHistory[]
 }
 
@@ -113,12 +113,14 @@ model CasePhoto {
 }
 
 model Appointment {
-  id        Int      @id @default(autoincrement())
+  //id        Int      @id @default(autoincrement())
   date      DateTime @db.Date
   time_from DateTime @db.Time()
   time_to   DateTime @db.Time()
   case_id   Int
   Case      Case     @relation(fields: [case_id], references: [id])
+
+  @@unique([case_id])
 }
 
 model CaseHistory {
