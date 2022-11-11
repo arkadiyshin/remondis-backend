@@ -9,8 +9,8 @@
   },
   "scripts": {
     "build": "tsc -w",
-    "start": "node dist/server.js",
-    "dev": "nodemon dist/server.js",
+    "start": "node dist/src/server.js",
+    "dev": "nodemon dist/src/server.js",
     "commitmsg": "validate-commit-msg",
     "commit": "git-cz",
     "prepare": "husky install"
