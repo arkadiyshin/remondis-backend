@@ -73,7 +73,6 @@ inactive inactive
   
 
   Appointment {
-    Int id PK 
     DateTime date  
     DateTime time_from  
     DateTime time_to  

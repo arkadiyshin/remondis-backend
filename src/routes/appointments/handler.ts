@@ -19,7 +19,7 @@ export const getAppointmentByHandler: RouteHandler<{
     const { case_id } = req.params
     const id = parseInt(case_id);
 
-    const findedAppointment = await req.server.prisma.appointment.findFirst({
+    const findedAppointment = await req.server.prisma.appointment.findUnique({
         where: {
             case_id: id,
         },
@@ -53,7 +53,7 @@ export const postAppointmentByCaseHandler: RouteHandler<{
     if (postAppointment)
         reply.code(200).send({ success: true, message: 'Appoinment created', appointment: postAppointment })
     else
-        reply.code(404).send({ success: false, message: 'Appoinment not found' })    
+        reply.code(404).send({ success: false, message: 'Appoinment not found' })
 }
 
 export const putAppointmentByCaseHandler: RouteHandler<{
@@ -66,7 +66,7 @@ export const putAppointmentByCaseHandler: RouteHandler<{
     const id = parseInt(case_id);
     const { date, time_from, time_to } = req.body;
 
-    const putAppointmentByCase = await req.server.prisma.appointment.updateMany({
+    const putAppointmentByCase = await req.server.prisma.appointment.update({
         data: {
             case_id: id,
             date: date,
@@ -80,27 +80,27 @@ export const putAppointmentByCaseHandler: RouteHandler<{
     if (putAppointmentByCase)
         reply.code(200).send({ success: true, message: 'Appoinment changed', appointment: putAppointmentByCase })
     else
-        reply.code(404).send({ success: false, message: 'Appoinment not found' })        
-    
+        reply.code(404).send({ success: false, message: 'Appoinment not found' })
+
 }
 
-export const deleteAppointmentByCaseHandler: RouteHandler <{
+export const deleteAppointmentByCaseHandler: RouteHandler<{
     Params: Params
     Reply: Reply
 }> = async function (req, reply) {
-    
+
     const { case_id } = req.params;
     const id = parseInt(case_id);
 
-    const deleteAppointmentByCaseId = await req.server.prisma.appointment.deleteMany({
+    const deleteAppointmentByCaseId = await req.server.prisma.appointment.delete({
         where: {
-            case_id : id
+            case_id: id
         }
     })
     if (deleteAppointmentByCaseId)
         reply.code(200).send({ success: true, message: 'Appoinment deleted' })
     else
         reply.code(404).send({ success: false, message: 'Appoinment not found' })
-    
+
 }
 
