@@ -13,8 +13,9 @@ import {
     declineCaseSchema,
     acceptCaseSchema,
     readyCaseSchema,
-    quoteCaseOpts,
-    closeCaseOpts,
+    quoteCaseSchema,
+    closeCaseSchema,
+    getCasesToDoSchema,
 } from './schema.js'
 
 import {
@@ -30,6 +31,7 @@ import {
     readyCaseHandler,
     quoteCaseHandler,
     closeCaseHandler,
+    getCasesToDoHandler,
 
 } from './handler.js'
 
@@ -41,6 +43,7 @@ export default async (app: FastifyInstance) => {
     app.addSchema(caseSchema);
 
     app.get('/', { schema: getCasesSchema }, getCasesHandler)
+    app.get('/ToDo/:user_id', { schema: getCasesToDoSchema }, getCasesToDoHandler)
     app.get('/:case_id', { schema: getCaseSchema }, getCaseHandler)
     app.post('/', { schema: postCaseSchema }, addCaseHandler)
     app.put('/:case_id', { schema: updateCaseSchema }, updateCaseHandler)
@@ -51,7 +54,7 @@ export default async (app: FastifyInstance) => {
     app.patch('/:case_id/decline', { schema: declineCaseSchema }, declineCaseHandler)
     app.patch('/:case_id/accept', { schema: acceptCaseSchema }, acceptCaseHandler)
     app.patch('/:case_id/ready', { schema: readyCaseSchema }, readyCaseHandler)
-    app.patch('/:case_id/quote', { schema: quoteCaseOpts }, quoteCaseHandler)
-    app.patch('/:case_id/close', { schema: closeCaseOpts }, closeCaseHandler)
+    app.patch('/:case_id/quote', { schema: quoteCaseSchema }, quoteCaseHandler)
+    app.patch('/:case_id/close', { schema: closeCaseSchema }, closeCaseHandler)
 
 }
