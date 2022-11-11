@@ -20,6 +20,7 @@
 **_finally_**
 > * all commit messages are validated. Check out the `commit rules` section.
 > * don't forget run `npx prisma migrate dev --name [scope]` command every time you change the database structure.
+> * each new variable must be added to mediator-file `configuration.ts`.
 
 ---
 
