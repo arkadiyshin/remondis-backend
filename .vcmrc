@@ -16,11 +16,12 @@
         "required": true,
         "allowed": [
             "general",
-            "docs",
             "user",
             "case",
             "appointment",
-            "email"
+            "email",
+            "model",
+            "api"
         ],
         "validate": true,
         "multiple": false
