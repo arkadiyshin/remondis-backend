@@ -5,21 +5,21 @@
 ## general information
 
 **_first_**
-> clone this repository.
-> pull the changes from the `dev` branch.
-> run `npm install` command to install dependencies.
-> fill enviromental variables in the `.env` file.
-> run `npm run build` script to compile the typescript code into js code in **watch mode**. Сompiled code is stored in a folder `dist`.
-> **NOTE** that when deleting a *.ts file, the *.js file is not automatically deleted.
-> run `npm run dev` script to start the server in **watch mode**.
+> * clone this repository.
+> * pull the changes from the `dev` branch.
+> * run `npm install` command to install dependencies.
+> * fill enviromental variables in the `.env` file.
+> * run `npm run build` script to compile the typescript code into js code in **watch mode**. Сompiled code is stored in a folder `dist`.
+> * **NOTE** that when deleting a *.ts file, the *.js file is not automatically deleted.
+> * run `npm run dev` script to start the server in **watch mode**.
 
 **_next_**
-> project documentation: Database model, REST API, etc. in the `documentation` section.
-> create a branch for the feature and switch to it (rules for working with branches in the section `repository structure`).
+> * project documentation: Database model, REST API, etc. in the `documentation` section.
+> * create a branch for the feature and switch to it (rules for working with branches in the section `repository structure`).
 
 **_finally_**
-> all commit messages are validated. Check out the `commit rules` section.
-> don't forget run `npx prisma migrate dev --name [scope]` command every time you change the database structure.
+> * all commit messages are validated. Check out the `commit rules` section.
+> * don't forget run `npx prisma migrate dev --name [scope]` command every time you change the database structure.
 
 ---
 
@@ -95,7 +95,7 @@ do not add dot(.) at the end of subject
 
 ---
 
-## documentation
+## documentation (local)
 
 1. Swagger: http://localhost:[APP_PORT]/docs/static/index.html
 * check REST API endpoints and **test it!**
