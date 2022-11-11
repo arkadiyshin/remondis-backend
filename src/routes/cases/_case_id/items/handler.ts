@@ -16,7 +16,7 @@ export const getCaseItemsHandler: RouteHandler<{
     });
     reply
         .code(200)
-        .send({ success: true, message: "", caseItems: records });
+        .send({ success: true, message: "List of case items", caseItems: records });
 
 };
 
