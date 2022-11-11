@@ -56,12 +56,14 @@ export const addCaseItemHandler: RouteHandler<{
     Reply: Reply | CaseItemNotFound
 }> = async function (req, reply) {
 
-    const { case_id } = req.params;
+    const { case_id, room } = req.params;
     const id = parseInt(case_id);
+    const room_id = parseInt(room!);
 
     const record = await req.server.prisma.caseItem.create({
         data: {
             case_id: id,
+            room: room_id,
             ...req.body,
         }
     });
