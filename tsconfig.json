@@ -4,6 +4,18 @@
       "outDir": "dist",
       "sourceMap": true
    },
+   "typedocOptions": {
+      "entryPoints": [
+         "src/"
+      ],
+      "out": "docs",
+      "entryPointStrategy": "Expand",
+      "plugin": [
+         "typedoc-theme-hierarchy"
+      ],
+      "theme": "hierarchy",
+      "name": "Remondis backend"
+   },
    "include": [
       "src/**/*.ts"
    ]
