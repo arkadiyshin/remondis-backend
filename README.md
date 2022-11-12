@@ -11,14 +11,18 @@
 * fill enviromental variables in the `.env` file.
 
 ### build
-* run `npm run build` script to compile the typescript code into js code in **watch mode**. Сompiled code is stored in a folder `dist`.
+* run `npm run build:ts` script to compile the typescript code into js code.
+* run `npm run watch:ts` script in **watch mode**.
+* Сompiled code is stored in a folder `dist`.
 
 >
 > **NOTE** that when deleting a *.ts file, the *.js file is not automatically deleted.
 >
 
 ### run
-* run `npm run dev` script to start the server in **watch mode**.
+* run `npm start` script to build and start the server.
+* run `dev:start` script just run the server
+* run `npm run dev` script to start sever in dev mode. Dev mode run `build:ts` script ones and then run concurrently `watch:ts` script and `dev:start` script.
 
 ### explore
 * project documentation: Database model, REST API, etc. in the `documentation` section.
@@ -30,6 +34,10 @@
 * don't forget run `npx prisma migrate dev --name [scope]` command every time you change the database structure.
 * each new variable must be added to mediator-file `configuration.ts`.
 
+### test
+* run `npm run test` script to trigger unit-tests
+* run `npm run test:cov` script running unit-tests with coverage (check item 5 in `documentation` section ).
+
 ---
 
 ## tech stack
@@ -37,6 +45,7 @@
 ### typescript
 
 ### fastify
+* fastify-cli
 * @fastify/autoload
 * fastify-plugin
 * @fastify/jwt
@@ -48,6 +57,8 @@
 * prisma-erd-generator
 
 ### @sendgrid/mail
+
+### jest
 
 ---
 
@@ -118,21 +129,23 @@ do not add dot(.) at the end of subject
 ---
 
 ## documentation (local)
-
 ### 1. Swagger: 
-* http://localhost:[APP_PORT]/docs/static/index.html
+* http://localhost:3000/docs/static/index.html
 * check REST API endpoints and **test it!**
 ### 2. ER diagram: 
 * https://github.com/WildCodeSchool/2022-07-EN-Berlin-Remote1-Project3Backend/blob/dev/prisma/ERD.md
 * To update ER diagram after changing the model: `npx prisma migrate dev --name <model name>`
 ### 3. DB model and documentation: 
-* http://localhost:[LIFE_SERVER_PORT]/prisma/docs/index.html
+* http://localhost:5500//prisma/docs/index.html
 * This documentation is aimed to help you to understand the DB Model and provide some examples how to use Prisma methods. 
 * To update DB model and documentation after model changes: `npx prisma migrate dev --name <model name>`
 ### 4. Prisma studio: 
-* http://localhost:[PRISMA_STUDIO_PORT]/
+* http://localhost:5555/
 * Prisma studio is the easiest way to explore and manipulate your data.
 * Just run command `npx prisma studio` inside your project directory 
- 
+### 5. Test coverage:
+* http://localhost:5500/coverage/lcov-report/index.html
+* Сheck the completeness of code coverage by tests
+> **NOTE** don't forget to put in the paths your own local ports.
 ---
 
