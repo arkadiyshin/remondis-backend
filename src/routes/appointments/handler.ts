@@ -14,7 +14,7 @@ export const getAppointmentsHandler: RouteHandler<{
 
 export const getAppointmentByHandler: RouteHandler<{
     Params: Params
-    Reply: Reply | AppointmentNotFound
+    Reply: Reply | AppointmentNotFound | any
 }> = async function (req, reply) {
     const { case_id } = req.params
     const id = parseInt(case_id);
@@ -35,31 +35,31 @@ export const getAppointmentByHandler: RouteHandler<{
 export const postAppointmentByCaseHandler: RouteHandler<{
     Params: Params
     Body: Body
-    Reply: Reply
+    Reply: Reply| any
 }> = async function (req, reply) {
 
-    const { case_id } = req.params;
-    const { date, time_from, time_to } = req.body
+    // const { case_id } = req.params;
+    // const { date, time_from, time_to } = req.body
 
-    const id = parseInt(case_id)
-    const postAppointment = await req.server.prisma.appointment.create({
-        data: {
-            case_id: id,
-            date: date,
-            time_from: time_from,
-            time_to: time_to,
-        }
-    })
-    if (postAppointment)
-        reply.code(200).send({ success: true, message: 'Appoinment created', appointment: postAppointment })
-    else
-        reply.code(404).send({ success: false, message: 'Appoinment not found' })
+    // const id = parseInt(case_id)
+    // const postAppointment = await req.server.prisma.appointment.create({
+    //     data: {
+    //         case_id: id,
+    //         date: date,
+    //         time_from: time_from,
+    //         time_to: time_to,
+    //     }
+    // })
+    // if (postAppointment)
+    //     reply.code(200).send({ success: true, message: 'Appoinment created', appointment: postAppointment })
+    // else
+    //     reply.code(404).send({ success: false, message: 'Appoinment not found' })
 }
 
 export const putAppointmentByCaseHandler: RouteHandler<{
     Params: Params
     Body: Body
-    Reply: Reply
+    Reply: Reply | any
 }> = async function (req, reply) {
 
     const { case_id } = req.params;

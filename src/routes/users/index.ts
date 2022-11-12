@@ -9,10 +9,10 @@ import {
 	confirmUserSchema,
 	updateUserSchema,
 	forgotPassSchema,
-	setNewPassSchema,
-	deleteUserSchema,
+	//setNewPassSchema,
+	//deleteUserSchema,
 	loginUserSchema,
-} from "./schema.js";
+} from "./schema";
 import {
 	getUserHandler,
 	getUsersHandler,
@@ -23,7 +23,7 @@ import {
 	// setNewPassHandler,
 	// deleteUserHandler,
 	loginUserHandler,
-} from "./handler.js";
+} from "./handler";
 
 
 export default async (app: FastifyInstance) => {

@@ -7,7 +7,7 @@ import {
     deleteCaseItemSchema,
     caseItemSchema,
     caseItemNotFoundSchema,
-} from './schema.js'
+} from './schema'
 
 import {
     getCaseItemsHandler,
@@ -15,7 +15,7 @@ import {
     addCaseItemHandler,
     updateCaseItemHandler,
     deleteCaseItemHandler,
-} from './handler.js'
+} from './handler'
 
 
 export default async (app: FastifyInstance) => {
