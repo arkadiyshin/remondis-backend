@@ -6,9 +6,9 @@ export const appointmentSchema = {
     $id: "appointment",
     type: "object",
     properties: {
-        date: { type: ["string"]},
-        time_from: { type: "string"},
-        time_to: { type: "string"}
+        date: { type: "string", tsType: `Date`, format: `date-time`},
+        time_from: { type: "string", tsType: `Date`, format: `date-time`},
+        time_to: { type: "string", tsType: `Date`, format: `date-time`}
     },
 } as const;
 
@@ -67,7 +67,7 @@ const replyListSchema = {
 export type AppointmentNotFound = FromSchema<typeof appointmentNotFoundSchema>
 export type Params = FromSchema<typeof paramsSchema>
 export type Querystring = FromSchema<typeof querystringSchema>
-export type Body = FromSchema<typeof appointmentSchema>
+export type Body = FromSchema<typeof appointmentSchema>;
 export type Reply = FromSchema<
     typeof replySchema,
     { references: [typeof appointmentSchema] }
