@@ -1,5 +1,5 @@
 import { type RouteHandler } from 'fastify'
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 import type { UserNotFound, Params, Querystring, BodyNew, BodyChange, Reply, ReplyList, BodyLogin } from './schema'
 import { Role } from '@prisma/client'; 
 
@@ -64,7 +64,7 @@ export const createUserHandler: RouteHandler<{
         reply.code(300).send({ success: false, message: "User already exist" })
     } else {
         const token = await req.server.jwt.sign({ sub: email_address })
-        const userToken = await req.server.prisma.user.upsert({
+        await req.server.prisma.user.upsert({
             create: {
                 email: email_address || "",
                 token: token
@@ -87,7 +87,7 @@ export const createUserHandler: RouteHandler<{
         }
 
         try {
-            const result = await req.server.sgMail.send(msg);
+            await req.server.sgMail.send(msg);
             reply.send({ success: true, message: 'Email sended'})
         } catch (error) {
             reply.send({ success: false, message: 'Email not sended' })
@@ -174,7 +174,7 @@ export const forgotPassHandler: RouteHandler<{
         reply.code(404).send({ success: false, message: "User not found" })
     } else {
         const token = await req.server.jwt.sign({ sub: email_address })
-        const userToken = await req.server.prisma.user.update({            
+        await req.server.prisma.user.update({            
             data: {
                 token: token
             },
@@ -192,7 +192,7 @@ export const forgotPassHandler: RouteHandler<{
     }
 
     try {
-        const result = await req.server.sgMail.send(msg);
+        await req.server.sgMail.send(msg);
         reply.send({ success: true, message: 'Email sended'})
     } catch (error) {
         reply.send({ success: false, message: 'Email not sended' })

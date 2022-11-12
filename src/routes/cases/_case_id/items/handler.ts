@@ -1,5 +1,5 @@
 import { type RouteHandler } from "fastify";
-import type { Params, ParamsReq, Querystring, Body, BodyNew, Reply, ReplyList, CaseItemNotFound } from './schema'
+import type { Params, ParamsReq, Body, BodyNew, Reply, ReplyList, CaseItemNotFound } from './schema'
 
 export const getCaseItemsHandler: RouteHandler<{
     Params: ParamsReq

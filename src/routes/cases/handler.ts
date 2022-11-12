@@ -9,7 +9,7 @@ import type {
   Reply,
   ReplyList,
   CaseNotFound,
-} from "./schema.js";
+} from "./schema";
 
 export const getCasesHandler: RouteHandler<{
   Querystring: Querystring;

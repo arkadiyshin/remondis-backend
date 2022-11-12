@@ -6,7 +6,7 @@ export const appointmentSchema = {
     $id: "appointment",
     type: "object",
     properties: {
-        date: { type: "string"},
+        date: { type: ["string"]},
         time_from: { type: "string"},
         time_to: { type: "string"}
     },

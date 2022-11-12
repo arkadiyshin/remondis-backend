@@ -1,7 +1,8 @@
 import fp from 'fastify-plugin'
-import sgMail, { MailService } from '@sendgrid/mail';
+import * as sgMail from '@sendgrid/mail';
+import type { MailService } from '@sendgrid/mail';
 import { FastifyPluginAsync } from 'fastify';
-import { SENDGRID_API_KEY } from '../configuration.js';
+import { SENDGRID_API_KEY } from '../configuration';
 
 // Use TypeScript module augmentation to declare the type of server.prisma to be PrismaClient
 declare module 'fastify' {

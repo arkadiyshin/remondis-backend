@@ -6,7 +6,7 @@ import {
     postAppointmentByCaseSchema,
     putAppointmentByCaseSchema,
     deleteAppointmentByCaseSchema
-} from './schema.js'
+} from './schema'
 
 import {
     getAppointmentsHandler,
@@ -14,7 +14,7 @@ import {
     postAppointmentByCaseHandler,
     putAppointmentByCaseHandler,
     deleteAppointmentByCaseHandler,
-} from './handler.js'
+} from './handler'
 
 export default async (app: FastifyInstance) => {
     

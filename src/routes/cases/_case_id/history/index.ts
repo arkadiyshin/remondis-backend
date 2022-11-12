@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
-import { getCaseHistorySchema } from './schema.js'
-import { getCaseHistoryHandler } from './handler.js'
+import { getCaseHistorySchema } from './schema'
+import { getCaseHistoryHandler } from './handler'
 
 
 export default async (app: FastifyInstance) => {

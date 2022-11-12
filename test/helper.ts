@@ -1,27 +1,30 @@
-import Fastify, { FastifyInstance } from 'fastify';
+// This file contains code that we reuse between our tests.
+import Fastify from 'fastify';
 import fp from 'fastify-plugin';
-import app from '../src/app';
+import App from '../src/app';
 
 // Fill in this config with all the configurations
 // needed for testing the application
 async function config() {
-  return {};
+    return {};
 }
 
+// Automatically build and tear down our instance
 function build() {
+    const app = Fastify();
 
-  const testApp: FastifyInstance = Fastify();
+    // fastify-plugin ensures that all decorators
+    // are exposed for testing purposes, this is
+    // different from the production setup
 
-  beforeAll(
-    async () => {
-      testApp.register(fp(app), await config());
-      await testApp.ready();
-    }
-  );
+    beforeAll(async () => {
+        void app.register(fp(App), await config());
+        await app.ready();
+    });
 
-  afterAll(() => testApp.close());
+    afterAll(() => app.close());
 
-  return testApp;
+    return app;
 }
 
 export { config, build };
