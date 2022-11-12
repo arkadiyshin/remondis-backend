@@ -5,6 +5,7 @@ import { FromSchema } from 'json-schema-to-ts'
 export const appointmentSchema = {
     $id: "appointment",
     type: "object",
+    required: ['date', 'time_from', 'time_to'],
     properties: {
         date: { type: "string", format: `date-time`},
         time_from: { type: "string", format: `date-time`},
