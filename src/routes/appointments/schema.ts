@@ -56,6 +56,8 @@ const replySchema = {
 const replyListSchema = {
     type: 'object',
     properties: {
+        success: { type: 'boolean' },
+        message: { type: 'string' },
         appointments: {
             type: 'array',
             appointments: { $ref: 'appointment#' }

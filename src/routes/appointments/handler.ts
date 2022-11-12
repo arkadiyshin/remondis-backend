@@ -8,8 +8,7 @@ export const getAppointmentsHandler: RouteHandler<{
 }> = async function (req, reply) {
 
     const appointment = await req.server.prisma.appointment.findMany();
-    reply.code(200).send({ appointments: appointment });
-    console.log({ appointments: appointment });
+    reply.code(200).send({ success: true, message: 'List of appointments', appointments: appointment });
 }
 
 export const getAppointmentByHandler: RouteHandler<{
