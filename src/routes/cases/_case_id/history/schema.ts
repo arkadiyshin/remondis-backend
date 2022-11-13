@@ -53,7 +53,7 @@ export const getCaseHistorySchema: FastifySchema = {
     params: paramsSchema,
     response: {
         200: {
-            ...caseHistorySchema,
+            ...replySchema,
         },
     },
 };
