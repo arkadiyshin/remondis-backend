@@ -1,5 +1,5 @@
 import { type RouteHandler } from 'fastify';
-import { AppointmentNotFound, Params, Querystring, Body, Reply, ReplyList, } from './schema';
+import type { AppointmentNotFound, Params, Querystring, Body, Reply, ReplyList, } from './schema';
 
 
 export const getAppointmentsHandler: RouteHandler<{
@@ -8,8 +8,7 @@ export const getAppointmentsHandler: RouteHandler<{
 }> = async function (req, reply) {
 
     const appointment = await req.server.prisma.appointment.findMany();
-    reply.code(200).send({ appointments: appointment });
-    console.log({ appointments: appointment });
+    reply.code(200).send({ success: true, message: 'List of appointments', appointments: appointment });
 }
 
 export const getAppointmentByHandler: RouteHandler<{
@@ -35,25 +34,30 @@ export const getAppointmentByHandler: RouteHandler<{
 export const postAppointmentByCaseHandler: RouteHandler<{
     Params: Params
     Body: Body
-    Reply: Reply| any
+    Reply: Reply | any
 }> = async function (req, reply) {
 
-    // const { case_id } = req.params;
-    // const { date, time_from, time_to } = req.body
+    const { case_id } = req.params;
+    const { date, time_from, time_to } = req.body
+    
+    if(!date || !time_from || !time_to) {
+        reply.code(404).send({ success: false, message: 'Appoinment not found' })
+        return;
+    }
 
-    // const id = parseInt(case_id)
-    // const postAppointment = await req.server.prisma.appointment.create({
-    //     data: {
-    //         case_id: id,
-    //         date: date,
-    //         time_from: time_from,
-    //         time_to: time_to,
-    //     }
-    // })
-    // if (postAppointment)
-    //     reply.code(200).send({ success: true, message: 'Appoinment created', appointment: postAppointment })
-    // else
-    //     reply.code(404).send({ success: false, message: 'Appoinment not found' })
+    const id = parseInt(case_id)
+    const postAppointment = await req.server.prisma.appointment.create({
+        data: {
+            case_id: id,
+            date: date,
+            time_from: time_from,
+            time_to: time_to,
+        }
+    })
+    if (postAppointment)
+        reply.code(200).send({ success: true, message: 'Appoinment created', appointment: postAppointment })
+    else
+        reply.code(404).send({ success: false, message: 'Appoinment not found' })
 }
 
 export const putAppointmentByCaseHandler: RouteHandler<{

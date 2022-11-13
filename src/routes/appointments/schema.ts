@@ -5,10 +5,11 @@ import { FromSchema } from 'json-schema-to-ts'
 export const appointmentSchema = {
     $id: "appointment",
     type: "object",
+    required: ['date', 'time_from', 'time_to'],
     properties: {
-        date: { type: ["string"]},
-        time_from: { type: "string"},
-        time_to: { type: "string"}
+        date: { type: "string", format: `date-time`},
+        time_from: { type: "string", format: `date-time`},
+        time_to: { type: "string", format: `date-time`}
     },
 } as const;
 
@@ -56,6 +57,8 @@ const replySchema = {
 const replyListSchema = {
     type: 'object',
     properties: {
+        success: { type: 'boolean' },
+        message: { type: 'string' },
         appointments: {
             type: 'array',
             appointments: { $ref: 'appointment#' }
@@ -67,7 +70,7 @@ const replyListSchema = {
 export type AppointmentNotFound = FromSchema<typeof appointmentNotFoundSchema>
 export type Params = FromSchema<typeof paramsSchema>
 export type Querystring = FromSchema<typeof querystringSchema>
-export type Body = FromSchema<typeof appointmentSchema>
+export type Body = FromSchema<typeof appointmentSchema>;
 export type Reply = FromSchema<
     typeof replySchema,
     { references: [typeof appointmentSchema] }
