@@ -8,7 +8,7 @@
 * clone this repository.
 * pull the changes from the `dev` branch.
 * run `npm install` command to install dependencies.
-* fill enviromental variables in the `.env` file.
+* create `.env` file and fill enviromental variables following the [`.env.sample`](./.env.sample).
 
 ### build
 * run `npm run build:ts` script to compile the typescript code into js code.
@@ -32,7 +32,7 @@
 * create a branch for the feature and switch to it (rules for working with branches in the section [`repository structure`](#repository-structure)).
 * all commit messages are validated. Check out the [`commit rules`](#commit-rules) section.
 * don't forget run `npx prisma migrate dev --name [scope]` command every time you change the database structure.
-* each new variable must be added to mediator-file `configuration.ts`.
+* each new variable must be added to mediator-file [`configuration.ts`](./src/configuration.ts).
 
 ### test
 * run `npm run test` script to trigger unit-tests
@@ -110,7 +110,7 @@ scope             | description
 **email**         | using sengrig email sender
 
 >
-> **NOTE** the scope can be changed. Check actual scope is in `.vcmrc` file
+> **NOTE** the scope can be changed. Check actual scope is in [`.vcmrc`](./.vcmrc) file
 >
 
 3. `<subject>` - there are different methodologies to write the subject, but the main rules are as follows:
