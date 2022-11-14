@@ -30,7 +30,7 @@ inactive inactive
     Int id PK 
     DateTime created_at  
     DateTime assigned_at  "nullable"
-    DateTime agreeded_at  "nullable"
+    DateTime confirmed_at  "nullable"
     String client_first_name  "nullable"
     String client_last_name  "nullable"
     String client_email  

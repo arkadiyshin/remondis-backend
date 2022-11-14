@@ -50,7 +50,7 @@ model Case {
   id                  Int             @id @default(autoincrement())
   created_at          DateTime        @default(now())
   assigned_at         DateTime?
-  agreeded_at         DateTime?
+  confirmed_at        DateTime?
   client_first_name   String?         @db.VarChar(100)
   client_last_name    String?         @db.VarChar(100)
   client_email        String          @default("") @db.VarChar(100)
