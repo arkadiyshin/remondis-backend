@@ -24,7 +24,7 @@ CREATE TABLE "Case" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "assigned_at" TIMESTAMP(3),
-    "agreeded_at" TIMESTAMP(3),
+    "confirmed_at" TIMESTAMP(3),
     "client_first_name" VARCHAR(100),
     "client_email" VARCHAR(100) NOT NULL,
     "address" VARCHAR(255) NOT NULL,

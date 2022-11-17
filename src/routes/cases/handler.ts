@@ -17,7 +17,7 @@ export const getCasesHandler: RouteHandler<{
 }> = async function (req, reply) {
 
   const cases = await req.server.prisma.case.findMany();
-  reply.send({ cases: cases });
+  reply.send({ success: true, message: "List of cases", cases: cases });
 };
 
 export const getCaseHandler: RouteHandler<{

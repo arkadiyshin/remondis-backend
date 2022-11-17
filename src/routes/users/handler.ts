@@ -1,27 +1,27 @@
 import { type RouteHandler } from 'fastify'
 import * as bcrypt from "bcrypt";
 import type { UserNotFound, Params, Querystring, BodyNew, BodyChange, Reply, ReplyList, BodyLogin } from './schema'
-import { Role } from '@prisma/client'; 
+import { Role } from '@prisma/client';
 
 
 export const getUsersHandler: RouteHandler<{
     Querystring: Querystring
     Reply: ReplyList
 }> = async function (req, reply) {
-    const where: any = {} ;
-    for (const [key,value] of Object.entries(req.query)) {
+    const where: any = {};
+    for (const [key, value] of Object.entries(req.query)) {
         where[key] = value
-    }       
+    }
     const userList = await req.server.prisma.user.findMany({
-        select:{
+        select: {
             id: true,
             email: true,
             username: true,
             role: true,
-            state: true,            
+            state: true,
         },
         where: where
-        
+
     });
 
     reply.send({ success: true, message: "List of users", users: userList })
@@ -88,11 +88,11 @@ export const createUserHandler: RouteHandler<{
 
         try {
             await req.server.sgMail.send(msg);
-            reply.send({ success: true, message: 'Email sended'})
+            reply.send({ success: true, message: 'Email sended' })
         } catch (error) {
             reply.send({ success: false, message: 'Email not sended' })
         }
-        
+
     }
 }
 
@@ -134,7 +134,7 @@ export const updateUserHandler: RouteHandler<{
 
     const { id, username, email_address, role, password } = req.body
     const hash_password = await bcrypt.hash(password!, 13);
-    console.log(hash_password);  
+    console.log(hash_password);
     const updateUser = await req.server.prisma.user.update({
         where: {
             id: id
@@ -146,14 +146,14 @@ export const updateUserHandler: RouteHandler<{
             hash_password: hash_password,
         }
     })
-    
+
     if (updateUser) {
-        const {hash_password, token, ...sendUser} = updateUser;
-    reply
-      .code(200)
-      .send({ success: true, message: "User changed", user: sendUser}); 
+        const { hash_password, token, ...sendUser } = updateUser;
+        reply
+            .code(200)
+            .send({ success: true, message: "User changed", user: sendUser });
     } else {
-         reply.code(404).send({ success: false, message: "User not found" });
+        reply.code(404).send({ success: false, message: "User not found" });
     }
 }
 
@@ -164,41 +164,41 @@ export const forgotPassHandler: RouteHandler<{
 }> = async function (req, reply) {
     const { user_id } = req.params;
     const id = parseInt(user_id);
-    const {email_address} = req.body;
+    const { email_address } = req.body;
     const userFind = await req.server.prisma.user.findFirst({
         where: {
             email: email_address
         }
     })
-    if(!userFind){ 
+    if (!userFind) {
         reply.code(404).send({ success: false, message: "User not found" })
     } else {
         const token = await req.server.jwt.sign({ sub: email_address })
-        await req.server.prisma.user.update({            
+        await req.server.prisma.user.update({
             data: {
                 token: token
             },
             where: {
                 id: id
             }
-    });
-    // should send email where user should press on button and go to the page for changing password
-    const msg = {
-        to: email_address, // Change to your recipient
-        from: 'noreplay.remondis@gmail.com', // Change to your verified sender
-        subject: 'forgot password',
-        text: `click here: ${token}`,
-        html: `<strong>click here: ${token}</strong>`,
-    }
+        });
+        // should send email where user should press on button and go to the page for changing password
+        const msg = {
+            to: email_address, // Change to your recipient
+            from: 'noreplay.remondis@gmail.com', // Change to your verified sender
+            subject: 'forgot password',
+            text: `click here: ${token}`,
+            html: `<strong>click here: ${token}</strong>`,
+        }
 
-    try {
-        await req.server.sgMail.send(msg);
-        reply.send({ success: true, message: 'Email sended'})
-    } catch (error) {
-        reply.send({ success: false, message: 'Email not sended' })
-    }
+        try {
+            await req.server.sgMail.send(msg);
+            reply.send({ success: true, message: 'Email sended' })
+        } catch (error) {
+            reply.send({ success: false, message: 'Email not sended' })
+        }
 
-}
+    }
 }
 
 // export const setNewPassHandler: RouteHandler<{
@@ -232,7 +232,7 @@ export const forgotPassHandler: RouteHandler<{
 //             reply.send({ success: true, message: 'Invalid method' })
 //         }
 //     }
-    
+
 // }
 
 // export const deleteUserHandler: RouteHandler<{
