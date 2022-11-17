@@ -34,6 +34,10 @@ export const getCasesHandler: RouteHandler<{
   } = req.query;
 
   const cases = await req.server.prisma.case.findMany({
+    include: {
+      State: true,
+      TypeOfProperty: true,
+    },
     where: {
       created_at: {
         gte: date_from,
@@ -64,6 +68,10 @@ export const getCaseHandler: RouteHandler<{
   const id = parseInt(case_id);
 
   const findedCase = await req.server.prisma.case.findUnique({
+    include: {
+      State: true,
+      TypeOfProperty: true,
+    },
     where: {
       id: id,
     },
