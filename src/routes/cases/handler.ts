@@ -1,6 +1,11 @@
 import { FastifyReply, FastifyRequest, type RouteHandler } from "fastify";
-import { MANAGER_ACTIONS, INSPECTOR_ACTIONS, MANAGER_TODO_STATES, INSPECTOR_TODO_STATES } from "../../constant";
-import { STATE_ONGOING } from '../../constant';
+import {
+  MANAGER_ACTIONS,
+  INSPECTOR_ACTIONS,
+  MANAGER_TODO_STATES,
+  INSPECTOR_TODO_STATES,
+} from "../../constant";
+import { STATE_ONGOING } from "../../constant";
 import type {
   Params,
   ParamsUserId,
@@ -95,6 +100,7 @@ export const updateCaseHandler: RouteHandler<{
   Body: BodyNew;
   Params: Params;
 }> = async function (req, reply) {
+  reply.header("Access-Control-Allow-Origin", "*");
   const { case_id } = req.params;
   const id = parseInt(case_id);
   const changedCase = await req.server.prisma.case.upsert({
@@ -419,56 +425,74 @@ export const closeCaseHandler: RouteHandler<{
 };
 
 export const getCasesToDoHandler: RouteHandler<{
-  Params: ParamsUserId
+  Params: ParamsUserId;
   Reply: ReplyList;
 }> = async function (req, reply) {
-
   const { user_id } = req.params;
   const id = parseInt(user_id);
 
   const user = await req.server.prisma.user.findUnique({
     where: {
-      id: id
-    }
-  })
+      id: id,
+    },
+  });
 
   if (!user) {
-    reply
-      .code(404)
-      .send({ success: false, message: 'User not found' });
+    reply.code(404).send({ success: false, message: "User not found" });
     return;
   }
 
-  const role = user.role
-  const roleCond = (role === "manager" ?
-    { manager_id: id } :
-    { inspector_id: id });
+  const role = user.role;
+  const roleCond =
+    role === "manager" ? { manager_id: id } : { inspector_id: id };
   const cases = await req.server.prisma.case.findMany({
     where: {
-      AND: [{ ...roleCond },
-      {
-        OR: [{ state_id: { in: (role === 'manager' ? MANAGER_TODO_STATES : INSPECTOR_TODO_STATES) } },
-        { AND: [{ state_id: STATE_ONGOING.id }, { Appointment: null }] },
-        { AND: [{ state_id: STATE_ONGOING.id }, { Appointment: { is: { date: { lte: new Date() } } } }] }
-        ]
-      }]
+      AND: [
+        { ...roleCond },
+        {
+          OR: [
+            {
+              state_id: {
+                in:
+                  role === "manager"
+                    ? MANAGER_TODO_STATES
+                    : INSPECTOR_TODO_STATES,
+              },
+            },
+            { AND: [{ state_id: STATE_ONGOING.id }, { Appointment: null }] },
+            {
+              AND: [
+                { state_id: STATE_ONGOING.id },
+                { Appointment: { is: { date: { lte: new Date() } } } },
+              ],
+            },
+          ],
+        },
+      ],
     },
     include: {
       Appointment: true,
     },
-  })
+  });
 
-  // add message and action to cases 
-  const casesToDo = cases.map(el => {
-
+  // add message and action to cases
+  const casesToDo = cases.map((el) => {
     if (!el.state_id) return el;
 
-    if (role === 'manager') {
-      return { message: MANAGER_ACTIONS[el.state_id]?.message, action: MANAGER_ACTIONS[el.state_id]?.action, ...el }
+    if (role === "manager") {
+      return {
+        message: MANAGER_ACTIONS[el.state_id]?.message,
+        action: MANAGER_ACTIONS[el.state_id]?.action,
+        ...el,
+      };
     } else {
-      return { message: INSPECTOR_ACTIONS[el.state_id]?.message, action: INSPECTOR_ACTIONS[el.state_id]?.action, ...el }
+      return {
+        message: INSPECTOR_ACTIONS[el.state_id]?.message,
+        action: INSPECTOR_ACTIONS[el.state_id]?.action,
+        ...el,
+      };
     }
-  })
+  });
 
-  reply.send({ success: true, message: 'ToDo list', cases: casesToDo });
+  reply.send({ success: true, message: "ToDo list", cases: casesToDo });
 };
