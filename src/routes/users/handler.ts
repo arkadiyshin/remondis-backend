@@ -269,7 +269,7 @@ export const loginUserHandler: RouteHandler<{
         if (findUser.hash_password) {
             const verifyPassword = await bcrypt.compare(password!, findUser.hash_password!);
             if (verifyPassword) {
-                reply.send({ success: true, message: 'Login success' })
+                reply.send({ success: true, message: 'Login success', user: {role: findUser.role, id: findUser.id}})
             } else {
                 reply.send({ success: false, message: 'Incorrect password' })
             }
@@ -278,3 +278,5 @@ export const loginUserHandler: RouteHandler<{
         }
     }
 }
+
+
