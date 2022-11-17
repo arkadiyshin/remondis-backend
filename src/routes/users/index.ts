@@ -38,8 +38,8 @@ export default async (app: FastifyInstance) => {
 	app.post('/register', { schema: createUserSchema }, createUserHandler)
 	app.put('/:user_id/confirm', { schema: confirmUserSchema }, confirmedUserHandler)
 	app.put('/:user_id', { schema: updateUserSchema }, updateUserHandler)
-	app.patch('/:user_id/forgotPassword/', { schema: forgotPassSchema }, forgotPassHandler)
-	// app.patch('/:user_id/setNewPassword/', { schema: setNewPassSchema }, setNewPassHandler)
+	app.patch('/:user_id/forgotPassword', { schema: forgotPassSchema }, forgotPassHandler)
+	// app.patch('/:user_id/setNewPassword', { schema: setNewPassSchema }, setNewPassHandler)
 	// app.delete('/:user_id/', { schema: deleteUserSchema }, deleteUserHandler)
 };
 
