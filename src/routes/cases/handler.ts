@@ -16,7 +16,10 @@ import type {
   Reply,
   ReplyList,
   CaseNotFound,
+  ReplyCoordinates,
+  Coordinates
 } from "./schema";
+
 
 export const getCasesHandler: RouteHandler<{
   Querystring: Querystring;
@@ -108,7 +111,7 @@ export const updateCaseHandler: RouteHandler<{
   Body: BodyNew;
   Params: Params;
 }> = async function (req, reply) {
-  reply.header("Access-Control-Allow-Origin", "*");
+
   const { case_id } = req.params;
   const id = parseInt(case_id);
   const changedCase = await req.server.prisma.case.upsert({
@@ -503,4 +506,62 @@ export const getCasesToDoHandler: RouteHandler<{
   });
 
   reply.send({ success: true, message: "ToDo list", cases: casesToDo });
+};
+
+export const getCasesCoordinatesHandler: RouteHandler<{
+  Params: ParamsUserId;
+  Reply: ReplyCoordinates;
+}> = async function (req, reply) {
+
+  const { user_id } = req.params;
+  const id = parseInt(user_id);
+
+  const date_from = new Date();
+  const date_to = new Date();
+  // add 1 day to 
+  date_to.setDate(date_to.getDate() + 1)
+
+  const appointments = await req.server.prisma.appointment.findMany({
+    include: {
+      Case: true,
+    },
+    where: {
+      AND: [
+        { Case: { inspector_id: id } },
+        {
+          date: {
+            gte: date_from,
+            lte: date_to,
+          }
+        }]
+    },
+  });
+  const coordinates: Coordinates[] = [];
+  for (const task of appointments) {
+    const res = await req.server.axios.get(`geocoding/${task.Case.address}.json?key=ciIcRLdEWxdk5UYhs2Uk`)
+    .then((res) => {
+      if (!res.data.features) return;
+      const coord: number[] = res.data.features[0].geometry.coordinates;
+      if (typeof coord[0] === 'number') {
+        coordinates.push({ lng: coord[0], lat: coord[1] })
+      } else {
+        coordinates.push({ lng: coord[0][0], lat: coord[0][1] })
+      }
+    })
+    console.log(`axios request`, res)
+  }
+
+  console.log(`coordinates`, coordinates)
+  console.log(`coordinates length`, coordinates.length)
+
+  if(coordinates.length > 0) {
+    reply
+        .code(200)
+        .send({ success: true, message: "Coordinates" , coordinates: coordinates });
+  } else {
+    reply
+        .code(404)
+        .send({ success: false, message: "Coordinates not found"});
+  }
+
 };

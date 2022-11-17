@@ -72,9 +72,10 @@ export const caseCoordinatesSchema = {
   $id: "caseCoordinates",
   type: "object",
   properties: {
-    lng: { type: "integer" },
-    lat: { type: "integer" },
+    lng: { type: "number" },
+    lat: { type: "number" },
   },
+  //required: ["lng" , "lat"],
 } as const;
 
 // types
@@ -152,7 +153,7 @@ const replyCoordinatesSchema = {
     message: { type: "string" },
     coordinates: {
       type: "array",
-      coordinate: { $ref: "caseCoordinatesSchema#" },
+      coordinates: { $ref: "caseCoordinatesSchema#" },
     },
   },
   additionalProperties: false,
@@ -165,6 +166,7 @@ export type Querystring = FromSchema<typeof querystringSchema>;
 export type BodyNew = FromSchema<typeof caseNewSchema>;
 export type BodyChange = FromSchema<typeof caseExtendSchema>;
 export type BodyStatus = FromSchema<typeof caseStatusSchema>;
+export type Coordinates = FromSchema<typeof caseCoordinatesSchema>;
 export type Reply = FromSchema<
   typeof replySchema,
   { references: [typeof caseSchema] }
