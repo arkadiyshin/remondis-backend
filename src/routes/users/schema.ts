@@ -254,7 +254,9 @@ export const forgotPassSchema: FastifySchema = {
     params: {
         ...paramsSchema
     },
-    body: userNewSchema.properties.email_address,
+    body: {
+        ...userNewSchema
+    },
     response: {
         201: {
             ...replySchema

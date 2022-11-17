@@ -1,6 +1,6 @@
 .env
 docs/
-./prisma/docs/
+prisma/docs/
 
 # Logs
 logs

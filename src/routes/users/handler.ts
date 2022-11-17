@@ -158,7 +158,7 @@ export const updateUserHandler: RouteHandler<{
 }
 
 export const forgotPassHandler: RouteHandler<{
-    Body: BodyChange;
+    Body: BodyNew;
     Params: Params;
     Reply: Reply;
 }> = async function (req, reply) {
