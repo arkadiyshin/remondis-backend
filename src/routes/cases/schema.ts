@@ -52,11 +52,10 @@ export const caseStatusSchema = {
   properties: {
     user_id: { type: "integer" },
     inspector_id: { type: "integer" },
-    reason:  { type: "string" }
+    reason: { type: "string" },
   },
   required: ["user_id"],
 } as const;
-
 
 // types
 export const caseNotFoundSchema = {
@@ -93,9 +92,12 @@ const querystringSchema = {
   properties: {
     date_from: { type: ["string"], format: "date-time" },
     date_to: { type: ["string"], format: "date-time" },
+    state_id: { type: ["integer"] },
     state: { type: ["string"] },
     inspector_id: { type: "integer" },
+    inspector: { type: ["string"] },
     manager_id: { type: "integer" },
+    manager: { type: ["string"] },
   },
   additionalProperties: false,
 } as const;
@@ -352,11 +354,10 @@ export const closeCaseSchema: FastifySchema = {
 
 export const getCasesToDoSchema: FastifySchema = {
   summary: "Get TODO list",
-  description:
-    "Get TODO list",
+  description: "Get TODO list",
   tags: ["case"],
   params: {
-    ...paramsUserIdSchema
+    ...paramsUserIdSchema,
   },
   response: {
     200: {
