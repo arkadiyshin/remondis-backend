@@ -68,6 +68,15 @@ export const caseStatusSchema = {
   required: ["user_id"],
 } as const;
 
+export const caseCoordinatesSchema = {
+  $id: "caseCoordinates",
+  type: "object",
+  properties: {
+    lng: { type: "integer" },
+    lat: { type: "integer" },
+  },
+} as const;
+
 // types
 export const caseNotFoundSchema = {
   $id: "caseNotFound",
@@ -136,6 +145,19 @@ const replyListSchema = {
   additionalProperties: false,
 } as const;
 
+const replyCoordinatesSchema = {
+  type: "object",
+  properties: {
+    success: { type: "boolean" },
+    message: { type: "string" },
+    coordinates: {
+      type: "array",
+      coordinate: { $ref: "caseCoordinatesSchema#" },
+    },
+  },
+  additionalProperties: false,
+} as const;
+
 export type CaseNotFound = FromSchema<typeof caseNotFoundSchema>;
 export type Params = FromSchema<typeof paramsSchema>;
 export type ParamsUserId = FromSchema<typeof paramsUserIdSchema>;
@@ -151,6 +173,10 @@ export type ReplyList = FromSchema<
   typeof replyListSchema,
   { references: [typeof caseSchema] }
 >;
+export type ReplyCoordinates = FromSchema<
+  typeof replyCoordinatesSchema,
+  { references: [typeof caseCoordinatesSchema] }
+>
 
 // Options
 export const getCasesSchema: FastifySchema = {
@@ -376,3 +402,17 @@ export const getCasesToDoSchema: FastifySchema = {
     },
   },
 };
+
+export const getCoordinatesSchema: FastifySchema = {
+  summary: "Get coordinates by users cases",
+  description: "Get coordinates by users cases",
+  tags: ["case"],
+  params: {
+    ...paramsUserIdSchema,
+  },
+  response: {
+    200: {
+      ...caseCoordinatesSchema,
+    },
+  },
+}
