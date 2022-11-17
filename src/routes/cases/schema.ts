@@ -24,6 +24,15 @@ export const caseExtendSchema = {
     squaremeters: { type: "integer" },
     quantity: { type: "integer" },
     way_to_property: { type: ["string", "null"] },
+    number_of_rooms: { type: ["integer", "null"] },
+    clear_area: { type: ["boolean", "null"] },
+    back_house: { type: ["boolean", "null"] },
+    parking: { type: ["boolean", "null"] },
+    furniture_lift: { type: ["boolean", "null"] },
+    closet_contents: { type: ["boolean", "null"] },
+    removing_carpets: { type: ["boolean", "null"] },
+    removing_lamps: { type: ["boolean", "null"] },
+    removing_curtain: { type: ["boolean", "null"] },
   },
 } as const;
 
@@ -43,6 +52,8 @@ export const caseSchema = {
     inspector: { type: ["string", "null"] },
     manager_id: { type: ["integer", "null"] },
     manager: { type: ["string", "null"] },
+    message: { type: ["string"] },
+    action: { type: ["string"] },
   },
 } as const;
 
@@ -52,11 +63,20 @@ export const caseStatusSchema = {
   properties: {
     user_id: { type: "integer" },
     inspector_id: { type: "integer" },
-    reason:  { type: "string" }
+    reason: { type: "string" },
   },
   required: ["user_id"],
 } as const;
 
+export const caseCoordinatesSchema = {
+  $id: "caseCoordinates",
+  type: "object",
+  properties: {
+    lng: { type: "number" },
+    lat: { type: "number" },
+  },
+  //required: ["lng" , "lat"],
+} as const;
 
 // types
 export const caseNotFoundSchema = {
@@ -93,9 +113,12 @@ const querystringSchema = {
   properties: {
     date_from: { type: ["string"], format: "date-time" },
     date_to: { type: ["string"], format: "date-time" },
+    state_id: { type: ["integer"] },
     state: { type: ["string"] },
     inspector_id: { type: "integer" },
+    inspector: { type: ["string"] },
     manager_id: { type: "integer" },
+    manager: { type: ["string"] },
   },
   additionalProperties: false,
 } as const;
@@ -123,6 +146,19 @@ const replyListSchema = {
   additionalProperties: false,
 } as const;
 
+const replyCoordinatesSchema = {
+  type: "object",
+  properties: {
+    success: { type: "boolean" },
+    message: { type: "string" },
+    coordinates: {
+      type: "array",
+      coordinates: { $ref: "caseCoordinatesSchema#" },
+    },
+  },
+  additionalProperties: false,
+} as const;
+
 export type CaseNotFound = FromSchema<typeof caseNotFoundSchema>;
 export type Params = FromSchema<typeof paramsSchema>;
 export type ParamsUserId = FromSchema<typeof paramsUserIdSchema>;
@@ -130,6 +166,7 @@ export type Querystring = FromSchema<typeof querystringSchema>;
 export type BodyNew = FromSchema<typeof caseNewSchema>;
 export type BodyChange = FromSchema<typeof caseExtendSchema>;
 export type BodyStatus = FromSchema<typeof caseStatusSchema>;
+export type Coordinates = FromSchema<typeof caseCoordinatesSchema>;
 export type Reply = FromSchema<
   typeof replySchema,
   { references: [typeof caseSchema] }
@@ -138,6 +175,10 @@ export type ReplyList = FromSchema<
   typeof replyListSchema,
   { references: [typeof caseSchema] }
 >;
+export type ReplyCoordinates = FromSchema<
+  typeof replyCoordinatesSchema,
+  { references: [typeof caseCoordinatesSchema] }
+>
 
 // Options
 export const getCasesSchema: FastifySchema = {
@@ -352,11 +393,10 @@ export const closeCaseSchema: FastifySchema = {
 
 export const getCasesToDoSchema: FastifySchema = {
   summary: "Get TODO list",
-  description:
-    "Get TODO list",
+  description: "Get TODO list",
   tags: ["case"],
   params: {
-    ...paramsUserIdSchema
+    ...paramsUserIdSchema,
   },
   response: {
     200: {
@@ -364,3 +404,17 @@ export const getCasesToDoSchema: FastifySchema = {
     },
   },
 };
+
+export const getCoordinatesSchema: FastifySchema = {
+  summary: "Get coordinates by users cases",
+  description: "Get coordinates by users cases",
+  tags: ["case"],
+  params: {
+    ...paramsUserIdSchema,
+  },
+  response: {
+    200: {
+      ...caseCoordinatesSchema,
+    },
+  },
+}

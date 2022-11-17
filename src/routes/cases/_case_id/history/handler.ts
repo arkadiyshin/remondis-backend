@@ -16,5 +16,5 @@ export const getCaseHistoryHandler: RouteHandler<{
     });
     reply
         .code(200)
-        .send({ success: true, message: "", casesHistory: records });
+        .send({ success: true, message: "List of history", casesHistory: records });
 };

@@ -12,8 +12,8 @@
     "start": "npm run build:ts && fastify start -l info dist/app.js",
     "build:ts": "tsc",
     "watch:ts": "tsc -w",
-    "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
-    "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js",
+    "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,Server\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
+    "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P -p 4000 dist/app.js",
     "commitmsg": "validate-commit-msg",
     "commit": "git-cz"
   },
@@ -37,6 +37,7 @@
   "homepage": "https://github.com/WildCodeSchool/2022-07-EN-Berlin-Remote1-Project3Backend#readme",
   "dependencies": {
     "@fastify/autoload": "^5.4.1",
+    "@fastify/cors": "^8.2.0",
     "@fastify/jwt": "^6.3.2",
     "@fastify/swagger": "^8.0.0",
     "@fastify/swagger-ui": "^1.1.0",
@@ -45,10 +46,12 @@
     "@types/jest": "^29.2.2",
     "bcrypt": "^5.1.0",
     "fastify": "^4.8.1",
+    "fastify-axios": "^1.2.6",
     "fastify-cli": "^5.5.1",
     "fastify-plugin": "^4.3.0",
     "jest": "^29.3.1",
-    "ts-jest": "^29.0.3"
+    "ts-jest": "^29.0.3",
+    "axios": "1.1.0"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^9.1.7",

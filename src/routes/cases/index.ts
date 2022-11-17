@@ -16,6 +16,7 @@ import {
     quoteCaseSchema,
     closeCaseSchema,
     getCasesToDoSchema,
+    getCoordinatesSchema,
 } from './schema'
 
 import {
@@ -32,6 +33,7 @@ import {
     quoteCaseHandler,
     closeCaseHandler,
     getCasesToDoHandler,
+    getCasesCoordinatesHandler,
 
 } from './handler'
 
@@ -44,6 +46,7 @@ export default async (app: FastifyInstance) => {
 
     app.get('/', { schema: getCasesSchema }, getCasesHandler)
     app.get('/ToDo/:user_id', { schema: getCasesToDoSchema }, getCasesToDoHandler)
+    app.get('/coordinates/:user_id', { schema: getCoordinatesSchema }, getCasesCoordinatesHandler)
     app.get('/:case_id', { schema: getCaseSchema }, getCaseHandler)
     app.post('/', { schema: postCaseSchema }, addCaseHandler)
     app.put('/:case_id', { schema: updateCaseSchema }, updateCaseHandler)

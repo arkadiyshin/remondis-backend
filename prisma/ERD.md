@@ -16,6 +16,7 @@ inactive inactive
   User {
     Int id PK 
     String email  
+    String phone  "nullable"
     String username  "nullable"
     String hash_password  "nullable"
     Role role  "nullable"
@@ -30,7 +31,7 @@ inactive inactive
     Int id PK 
     DateTime created_at  
     DateTime assigned_at  "nullable"
-    DateTime agreeded_at  "nullable"
+    DateTime confirmed_at  "nullable"
     String client_first_name  "nullable"
     String client_last_name  "nullable"
     String client_email  
@@ -41,6 +42,15 @@ inactive inactive
     Float squaremeters  
     Int quantity  
     String way_to_property  "nullable"
+    Int number_of_rooms  "nullable"
+    Boolean clear_area  "nullable"
+    Boolean back_house  "nullable"
+    Boolean parking  "nullable"
+    Boolean furniture_lift  "nullable"
+    Boolean closet_contents  "nullable"
+    Boolean removing_carpets  "nullable"
+    Boolean removing_lamps  "nullable"
+    Boolean removing_curtain  "nullable"
     }
   
 

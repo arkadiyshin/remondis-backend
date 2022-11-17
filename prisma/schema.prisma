@@ -34,6 +34,7 @@ enum UserState {
 model User {
   id              Int           @id @default(autoincrement())
   email           String        @unique @db.VarChar(100)
+  phone           String?       @default("") @db.VarChar(100)
   username        String?       @unique @db.VarChar(100)
   hash_password   String?       @db.VarChar(255)
   role            Role?
@@ -50,7 +51,7 @@ model Case {
   id                  Int             @id @default(autoincrement())
   created_at          DateTime        @default(now())
   assigned_at         DateTime?
-  agreeded_at         DateTime?
+  confirmed_at        DateTime?
   client_first_name   String?         @db.VarChar(100)
   client_last_name    String?         @db.VarChar(100)
   client_email        String          @default("") @db.VarChar(100)
@@ -73,6 +74,15 @@ model Case {
   CasePhoto           CasePhoto[]
   Appointment         Appointment?
   CaseHistory         CaseHistory[]
+  number_of_rooms     Int?            @default(0)
+  clear_area          Boolean?        @default(false)
+  back_house          Boolean?        @default(false)
+  parking             Boolean?        @default(false)
+  furniture_lift      Boolean?        @default(false)
+  closet_contents     Boolean?        @default(false)
+  removing_carpets    Boolean?        @default(false)
+  removing_lamps      Boolean?        @default(false)
+  removing_curtain    Boolean?        @default(false)
 }
 
 model TypeOfProperty {
