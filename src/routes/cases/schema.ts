@@ -43,6 +43,8 @@ export const caseSchema = {
     inspector: { type: ["string", "null"] },
     manager_id: { type: ["integer", "null"] },
     manager: { type: ["string", "null"] },
+    message: { type: ["string"] },
+    action: { type: ["string"] },
   },
 } as const;
 
