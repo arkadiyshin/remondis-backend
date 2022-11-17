@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest, type RouteHandler } from "fastify";
 import { MANAGER_ACTIONS, INSPECTOR_ACTIONS, MANAGER_TODO_STATES, INSPECTOR_TODO_STATES } from "../../constant";
-import { STATE_CREATED, STATE_ASSIGNED, STATE_CONFIRMED, STATE_ONGOING, STATE_READY, STATE_QUOTED, STATE_CLOSED } from '../../constant';
+import { STATE_ONGOING } from '../../constant';
 import type {
   Params,
   ParamsUserId,
