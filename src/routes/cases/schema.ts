@@ -24,6 +24,15 @@ export const caseExtendSchema = {
     squaremeters: { type: "integer" },
     quantity: { type: "integer" },
     way_to_property: { type: ["string", "null"] },
+    number_of_rooms: { type: ["integer", "null"] },
+    clear_area: { type: ["boolean", "null"] },
+    back_house: { type: ["boolean", "null"] },
+    parking: { type: ["boolean", "null"] },
+    furniture_lift: { type: ["boolean", "null"] },
+    closet_contents: { type: ["boolean", "null"] },
+    removing_carpets: { type: ["boolean", "null"] },
+    removing_lamps: { type: ["boolean", "null"] },
+    removing_curtain: { type: ["boolean", "null"] },
   },
 } as const;
 
