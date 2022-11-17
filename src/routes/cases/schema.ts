@@ -24,6 +24,15 @@ export const caseExtendSchema = {
     squaremeters: { type: "integer" },
     quantity: { type: "integer" },
     way_to_property: { type: ["string", "null"] },
+    number_of_rooms: { type: ["integer", "null"] },
+    clear_area: { type: ["boolean", "null"] },
+    back_house: { type: ["boolean", "null"] },
+    parking: { type: ["boolean", "null"] },
+    furniture_lift: { type: ["boolean", "null"] },
+    closet_contents: { type: ["boolean", "null"] },
+    removing_carpets: { type: ["boolean", "null"] },
+    removing_lamps: { type: ["boolean", "null"] },
+    removing_curtain: { type: ["boolean", "null"] },
   },
 } as const;
 
@@ -43,6 +52,8 @@ export const caseSchema = {
     inspector: { type: ["string", "null"] },
     manager_id: { type: ["integer", "null"] },
     manager: { type: ["string", "null"] },
+    message: { type: ["string"] },
+    action: { type: ["string"] },
   },
 } as const;
 
@@ -52,11 +63,10 @@ export const caseStatusSchema = {
   properties: {
     user_id: { type: "integer" },
     inspector_id: { type: "integer" },
-    reason:  { type: "string" }
+    reason: { type: "string" },
   },
   required: ["user_id"],
 } as const;
-
 
 // types
 export const caseNotFoundSchema = {
@@ -93,9 +103,12 @@ const querystringSchema = {
   properties: {
     date_from: { type: ["string"], format: "date-time" },
     date_to: { type: ["string"], format: "date-time" },
+    state_id: { type: ["integer"] },
     state: { type: ["string"] },
     inspector_id: { type: "integer" },
+    inspector: { type: ["string"] },
     manager_id: { type: "integer" },
+    manager: { type: ["string"] },
   },
   additionalProperties: false,
 } as const;
@@ -352,11 +365,10 @@ export const closeCaseSchema: FastifySchema = {
 
 export const getCasesToDoSchema: FastifySchema = {
   summary: "Get TODO list",
-  description:
-    "Get TODO list",
+  description: "Get TODO list",
   tags: ["case"],
   params: {
-    ...paramsUserIdSchema
+    ...paramsUserIdSchema,
   },
   response: {
     200: {
