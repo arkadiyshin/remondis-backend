@@ -13,13 +13,41 @@ import type {
   CaseNotFound,
 } from "./schema";
 
-
 export const getCasesHandler: RouteHandler<{
   Querystring: Querystring;
   Reply: ReplyList;
 }> = async function (req, reply) {
+  const {
+    date_from,
+    date_to,
+    state_id,
+    state,
+    inspector_id,
+    inspector,
+    manager_id,
+    manager,
+  } = req.query;
 
-  const cases = await req.server.prisma.case.findMany();
+  const cases = await req.server.prisma.case.findMany({
+    where: {
+      created_at: {
+        gte: date_from,
+        lte: date_to,
+      },
+      state_id: state_id,
+      State: {
+        title: state,
+      },
+      inspector_id: inspector_id,
+      Inspector: {
+        username: inspector,
+      },
+      manager_id: manager_id,
+      Manager: {
+        username: manager,
+      },
+    },
+  });
   reply.send({ success: true, message: "List of cases", cases: cases });
 };
 
@@ -27,7 +55,6 @@ export const getCaseHandler: RouteHandler<{
   Params: Params;
   Reply: Reply | CaseNotFound;
 }> = async function (req, reply) {
-
   const { case_id } = req.params;
   const id = parseInt(case_id);
 
@@ -124,14 +151,16 @@ export const changeCaseHandler: RouteHandler<{
   else reply.code(404).send({ success: false, message: "Case is not found" });
 }; */
 
-const hasRights = async function (nextStateArg: number, req: FastifyRequest, reply: FastifyReply) {
-
+const hasRights = async function (
+  nextStateArg: number,
+  req: FastifyRequest,
+  reply: FastifyReply
+) {
   const params = req.params as Params;
   const body = req.body as BodyStatus;
 
   const { case_id } = params;
   const id = parseInt(case_id);
-
 
   const foundCase = await req.server.prisma.case.findUnique({
     where: {
@@ -390,56 +419,57 @@ export const closeCaseHandler: RouteHandler<{
 };
 
 export const getCasesToDoHandler: RouteHandler<{
-  Params: ParamsUserId
+  Params: ParamsUserId;
   Reply: ReplyList;
 }> = async function (req, reply) {
-
   const { user_id } = req.params;
   const id = parseInt(user_id);
 
   const user = await req.server.prisma.user.findUnique({
     where: {
-      id: id
-    }
-  })
+      id: id,
+    },
+  });
 
   if (!user) {
-    reply
-      .code(404)
-      .send({ success: false, message: 'User not found' });
+    reply.code(404).send({ success: false, message: "User not found" });
     return;
   }
 
-  const role = user.role
-  const roleCond = (role === "manager" ?
-    { manager_id: id } :
-    { inspector_id: id });
+  const role = user.role;
+  // hardcode!!
+  const managerToDoStates = [1, 2, 4, 5];
+  const inspectorToDoStates = [2, 4];
+
+  const roleCond =
+    role === "manager" ? { manager_id: id } : { inspector_id: id };
   const cases = await req.server.prisma.case.findMany({
     where: {
-      AND: [{ ...roleCond },
-      {
-        OR: [{ state_id: { in: (role === 'manager' ? MANAGER_TODO_STATES : INSPECTOR_TODO_STATES) } },
-        { AND: [{ state_id: STATE_ONGOING.id }, { Appointment: null }] },
-        { AND: [{ state_id: STATE_ONGOING.id }, { Appointment: { is: { date: { lte: new Date() } } } }] }
-        ]
-      }]
+      AND: [
+        { ...roleCond },
+        {
+          OR: [
+            {
+              state_id: {
+                in:
+                  role === "manager" ? managerToDoStates : inspectorToDoStates,
+              },
+            },
+            { AND: [{ state_id: 3 }, { Appointment: null }] },
+            {
+              AND: [
+                { state_id: 3 },
+                { Appointment: { is: { date: { lte: new Date() } } } },
+              ],
+            },
+          ],
+        },
+      ],
     },
     include: {
       Appointment: true,
     },
-  })
+  });
 
-  // add message and action to cases 
-  const casesToDo = cases.map(el => {
-
-    if (!el.state_id) return el;
-
-    if (role === 'manager') {
-      return { message: MANAGER_ACTIONS[el.state_id]?.message, action: MANAGER_ACTIONS[el.state_id]?.action, ...el }
-    } else {
-      return { message: INSPECTOR_ACTIONS[el.state_id]?.message, action: INSPECTOR_ACTIONS[el.state_id]?.action, ...el }
-    }
-  })
-
-  reply.send({ success: true, message: 'ToDo list', cases: casesToDo });
+  reply.send({ success: true, message: "ToDo list", cases });
 };
