@@ -76,7 +76,6 @@ inactive inactive
 
   CasePhoto {
     Int id PK 
-    Int room  
     Bytes photo  
     String file_name  
     }
@@ -114,6 +113,7 @@ inactive inactive
     Case o{--|o User : "Inspector"
     CaseItem o{--|| Case : "Case"
     CasePhoto o{--|| Case : "Case"
+    CasePhoto o{--|| CaseItem : "CaseItem"
     Appointment o|--|| Case : "Case"
     CaseHistory o{--|| Case : "Case"
     CaseHistory o{--|| CaseState : "CaseState"
