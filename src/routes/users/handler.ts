@@ -79,7 +79,7 @@ export const createUserHandler: RouteHandler<{
         })
 
         const html = await req.server.view("/src/templates/confirm-mail.ejs", {
-            username: 'email_address',
+            username: email_address,
             confirm_link: `${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`
         });
         console.log(`${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`)
