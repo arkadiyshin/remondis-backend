@@ -2,6 +2,7 @@ import { type RouteHandler } from 'fastify'
 import * as bcrypt from "bcrypt";
 import type { UserNotFound, Params, Querystring, BodyNew, BodyChange, Reply, ReplyList, BodyLogin } from './schema'
 import { Role } from '@prisma/client';
+import { FRONTEND_URL } from '../../configuration'
 
 
 export const getUsersHandler: RouteHandler<{
@@ -77,13 +78,18 @@ export const createUserHandler: RouteHandler<{
             }
         })
 
+        const html = await req.server.view("/src/templates/confirm-mail.ejs", {
+            username: 'email_address',
+            confirm_link: `${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`
+        });
+        console.log(`${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`)
+
         //here should be sending token by email
         const msg = {
             to: email_address, // Change to your recipient
             from: 'noreplay.remondis@gmail.com', // Change to your verified sender
-            subject: 'confirm email',
-            text: `click here: ${token}`,
-            html: `<strong>click here: ${token}</strong>`,
+            subject: 'Confirm your e-mail',
+            html: html,
         }
 
         try {
@@ -183,12 +189,17 @@ export const forgotPassHandler: RouteHandler<{
             }
         });
         // should send email where user should press on button and go to the page for changing password
+        const html = await req.server.view("/src/templates/confirm-mail.ejs", {
+            username: userFind.username,
+            confirm_link: `${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`
+        });
+        console.log(`${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`)
         const msg = {
             to: email_address, // Change to your recipient
             from: 'noreplay.remondis@gmail.com', // Change to your verified sender
-            subject: 'forgot password',
-            text: `click here: ${token}`,
-            html: `<strong>click here: ${token}</strong>`,
+            subject: 'Confirm your e-mail',
+            //text: `click here: ${token}`,
+            html: html,
         }
 
         try {
@@ -269,7 +280,7 @@ export const loginUserHandler: RouteHandler<{
         if (findUser.hash_password) {
             const verifyPassword = await bcrypt.compare(password!, findUser.hash_password!);
             if (verifyPassword) {
-                reply.send({ success: true, message: 'Login success', user: {role: findUser.role, id: findUser.id}})
+                reply.send({ success: true, message: 'Login success', user: { role: findUser.role, id: findUser.id } })
             } else {
                 reply.send({ success: false, message: 'Incorrect password' })
             }
