@@ -187,15 +187,15 @@ export const getCasesSchema: FastifySchema = {
     "Get list of cases filtered by: data ceration, state, inspector, manager",
   tags: ["case"],
   querystring: {
-    date_from: { type: ["string", "null"], format: "date-time" },
-    date_to: { type: ["string", "null"], format: "date-time" },
-    state_id: { type: ["integer", "null"] },
-    state: { type: ["string", "null"] },
-    inspector_id: { type: "integer" },
-    inspector: { type: "string" },
-    manager_id: { type: "integer" },
-    manager: { type: "string" },
-  },
+      date_from: { type: ["string", "null"], format: "date-time" },
+      date_to: { type: ["string", "null"], format: "date-time" },
+      state_id: { type: ["integer", "null"] },
+      state: { type: ["string", "null"] },
+      inspector_id: { type: "integer" },
+      inspector: { type: "string" },
+      manager_id: { type: "integer" },
+      manager: { type: "string" },
+    },
   response: {
     200: {
       ...replyListSchema,
@@ -414,7 +414,7 @@ export const getCoordinatesSchema: FastifySchema = {
   },
   response: {
     200: {
-      ...caseCoordinatesSchema,
+      ...replyCoordinatesSchema,
     },
   },
 }
