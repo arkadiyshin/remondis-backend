@@ -14,10 +14,10 @@ export const userExtendedSchema = {
     $id: "userExtended",
     type: "object",
     properties: {
-        id: { type: "integer" },
-        username: { type: ["string","null"] },        
-        password: { type: "string", format: "password" },
         ...{ ...userNewSchema.properties },
+        username: { type: ["string","null"] },        
+        password: { type: ["string","null"]/* , format: "password" */ },
+        phone: { type: ["string","null"]},
         role: { type: ["string", "null"] },
     },
 } as const;
@@ -26,10 +26,11 @@ export const userSchema = {
     $id: "user",
     type: "object",
     properties: {
+        id: { type: "integer" },
         ...{ ...userExtendedSchema.properties },
-        state: { type: ["string", "null"] },
-        created_time: { type: "string" },
-        confirmed_time: { type: "string" },
+        // state: { type: ["string", "null"] },
+        // created_time: { type: "string" },
+        // confirmed_time: { type: "string" },
     },
 } as const;
 
