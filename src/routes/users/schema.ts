@@ -171,9 +171,9 @@ export const confirmUserSchema: FastifySchema = {
     headers: {
         authorization: {type: "string"}
     },
-    params: {
-        ...paramsSchema,
-    },
+    // params: {
+    //     ...paramsSchema,
+    // },
     // body: {
     //     ...userExtendedSchema,
     // },
