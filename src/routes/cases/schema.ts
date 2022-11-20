@@ -74,6 +74,7 @@ export const caseCoordinatesSchema = {
   properties: {
     lng: { type: "number" },
     lat: { type: "number" },
+    address: { type: "string" },
   },
   //required: ["lng" , "lat"],
 } as const;
