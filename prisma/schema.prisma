@@ -104,22 +104,24 @@ model CaseState {
 model CaseItem {
   //id          Int     @id @default(autoincrement())
   case_id     Int
-  Case        Case    @relation(fields: [case_id], references: [id])
-  room        Int     @default(0)
-  room_title  String? @db.VarChar(20)
+  Case        Case        @relation(fields: [case_id], references: [id])
+  room        Int         @default(0)
+  room_title  String?     @db.VarChar(20)
   description String?
-  quantity    Int     @default(0)
+  quantity    Int         @default(0)
+  CasePhoto   CasePhoto[]
 
   @@unique(fields: [case_id, room], name: "caseRoom")
 }
 
 model CasePhoto {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   case_id   Int
-  Case      Case   @relation(fields: [case_id], references: [id])
-  room      Int    @default(0)
+  Case      Case     @relation(fields: [case_id], references: [id])
+  room      Int      @default(0)
+  CaseItem  CaseItem @relation(fields: [case_id, room], references: [case_id, room])
   photo     Bytes
-  file_name String @db.VarChar(255)
+  file_name String   @db.VarChar(255)
 }
 
 model Appointment {

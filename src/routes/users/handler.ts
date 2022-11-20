@@ -79,7 +79,7 @@ export const createUserHandler: RouteHandler<{
         })
 
         const html = await req.server.view("/src/templates/confirm-mail.ejs", {
-            username: 'email_address',
+            username: email_address,
             confirm_link: `${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`
         });
         console.log(`${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`)
@@ -103,11 +103,10 @@ export const createUserHandler: RouteHandler<{
 }
 
 export const confirmedUserHandler: RouteHandler<{
-    Params: Params;
+    Body: BodyChange;
     Reply: Reply;
 }> = async function (req, reply) {
-    const { user_id } = req.params;
-    const id = parseInt(user_id);
+    const { email_address } = req.body;    
     if (req.headers.authorization === undefined) {
         console.error('Token undefined')
     } else {
@@ -116,7 +115,7 @@ export const confirmedUserHandler: RouteHandler<{
         if (method === "Bearer") {
             const findToken = await req.server.prisma.user.findFirst({
                 where: {
-                    id: id
+                    email: email_address
                 }
             })
             if (findToken?.token === token) {
