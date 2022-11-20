@@ -20,7 +20,7 @@ export const caseExtendSchema = {
     client_last_name: { type: ["string", "null"] },
     type_of_property_id: { type: ["integer", "null"] },
     floor: { type: "integer" },
-    elevator: { type: "integer" },
+    elevator: { type: ["boolean", "null"] },
     squaremeters: { type: "integer" },
     quantity: { type: "integer" },
     way_to_property: { type: ["string", "null"] },
@@ -74,6 +74,7 @@ export const caseCoordinatesSchema = {
   properties: {
     lng: { type: "number" },
     lat: { type: "number" },
+    address: { type: "string" },
   },
   //required: ["lng" , "lat"],
 } as const;
