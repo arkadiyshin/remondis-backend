@@ -91,11 +91,11 @@ export const addCaseHandler: RouteHandler<{
   Body: BodyNew;
   Reply: Reply;
 }> = async function (req, reply) {
-  console.log(req.body);
 
   const newCase = await req.server.prisma.case.create({
     data: {
       ...req.body,
+      state_id: 1,
     },
   });
 
