@@ -38,7 +38,7 @@ inactive inactive
     String client_phone  
     String address  
     Int floor  
-    Int elevator  
+    Boolean elevator  "nullable"
     Float squaremeters  
     Int quantity  
     String way_to_property  "nullable"
