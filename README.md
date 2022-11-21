@@ -138,7 +138,7 @@ do not add dot(.) at the end of subject
 * https://github.com/WildCodeSchool/2022-07-EN-Berlin-Remote1-Project3Backend/blob/dev/prisma/ERD.md
 * To update ER diagram after changing the model: `npx prisma migrate dev --name <model name>`
 ### 3. DB model and documentation: 
-* http://localhost:5500//prisma/docs/index.html
+* http://localhost:5500/prisma/docs/index.html
 * This documentation is aimed to help you to understand the DB Model and provide some examples how to use Prisma methods. 
 * To update DB model and documentation after model changes: `npx prisma migrate dev --name <model name>`
 ### 4. Prisma studio: 
