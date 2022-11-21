@@ -142,7 +142,7 @@ export const updateUserHandler: RouteHandler<{
     const id = parseInt(user_id);
 
     console.log(req.body);
-    const { username, role, email_address, password } = req.body;
+    const { username, phone, role, email_address, password } = req.body;
     
     let hash_password = '';
     if(password) {
@@ -159,6 +159,7 @@ export const updateUserHandler: RouteHandler<{
             role: role as Role,
             email: email_address,
             hash_password: hash_password,
+            phone: phone,
         }
     })
 
