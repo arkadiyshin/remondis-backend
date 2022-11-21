@@ -149,18 +149,29 @@ export const updateUserHandler: RouteHandler<{
         hash_password = await bcrypt.hash(password!, 13);
     }
 
-    console.log(hash_password);
+    //console.log(hash_password);
+    let condData = {};
+    condData = !role ? {...condData} : {role: role as Role};
+    condData = !username ? {...condData} : {...condData, username: username};
+    condData = !phone ? {...condData} : {...condData, phone: phone};
+    condData = !email_address? {...condData} : {...condData, email: email_address};
+    condData = !hash_password? {...condData} : {...condData, hash_password: hash_password};
+    console.log(condData);
     const updateUser = await req.server.prisma.user.update({
         where: {
             id: id
         },
-        data: {
-            username: username,
-            role: role as Role,
-            email: email_address,
-            hash_password: hash_password,
-            phone: phone,
-        }
+        data: {...condData},
+        //{
+        //     ...condData,
+        //     //{...condData},
+        //     // username: username,
+        //     // email: email_address,
+        //     // hash_password: hash_password,
+        //     // phone: phone,
+            
+        //    // (role === '' ? '' : role),
+        // }
     })
 
     if (updateUser) {
