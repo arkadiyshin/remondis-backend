@@ -119,7 +119,8 @@ export const confirmedUserHandler: RouteHandler<{
                 }
             })
             if (findToken?.token === token) {
-                reply.send({ success: true, message: 'User verified' })
+                const {token, hash_password, ...user} = findToken;
+                reply.send({ success: true, message: 'User verified', user })
             }
             else {
                 reply.send({ success: false, message: 'Invalid token' })
@@ -137,19 +138,40 @@ export const updateUserHandler: RouteHandler<{
     Reply: Reply;
 }> = async function (req, reply) {
 
-    const { id, username, email_address, role, password } = req.body
-    const hash_password = await bcrypt.hash(password!, 13);
-    console.log(hash_password);
+    const {user_id} = req.params;
+    const id = parseInt(user_id);
+
+    console.log(req.body);
+    const { username, phone, role, email_address, password } = req.body;
+    
+    let hash_password = '';
+    if(password) {
+        hash_password = await bcrypt.hash(password!, 13);
+    }
+
+    //console.log(hash_password);
+    let condData = {};
+    condData = !role ? {...condData} : {role: role as Role};
+    condData = !username ? {...condData} : {...condData, username: username};
+    condData = !phone ? {...condData} : {...condData, phone: phone};
+    condData = !email_address? {...condData} : {...condData, email: email_address};
+    condData = !hash_password? {...condData} : {...condData, hash_password: hash_password};
+    console.log(condData);
     const updateUser = await req.server.prisma.user.update({
         where: {
             id: id
         },
-        data: {
-            username: username,
-            role: role as Role,
-            email: email_address,
-            hash_password: hash_password,
-        }
+        data: {...condData},
+        //{
+        //     ...condData,
+        //     //{...condData},
+        //     // username: username,
+        //     // email: email_address,
+        //     // hash_password: hash_password,
+        //     // phone: phone,
+            
+        //    // (role === '' ? '' : role),
+        // }
     })
 
     if (updateUser) {

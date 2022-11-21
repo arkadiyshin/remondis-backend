@@ -146,6 +146,7 @@ export const changeCaseHandler: RouteHandler<{
       ...req.body,
     },
   });
+  console.log(changedCase)
   if (changedCase)
     reply
       .code(200)
@@ -470,13 +471,17 @@ export const getCasesToDoHandler: RouteHandler<{
                     : INSPECTOR_TODO_STATES,
               },
             },
-            { AND: [{ state_id: STATE_ONGOING.id }, { Appointment: null }] },
             {
-              AND: [
-                { state_id: STATE_ONGOING.id },
-                { Appointment: { is: { date: { lte: new Date() } } } },
-              ],
-            },
+              OR: [
+                { AND: [{ state_id: STATE_ONGOING.id }, { Appointment: null }] },
+                {
+                  AND: [
+                    { state_id: STATE_ONGOING.id },
+                    { Appointment: { is: { date: { lte: new Date() } } } },
+                  ],
+                },
+              ]
+            }
           ],
         },
       ],
@@ -517,9 +522,13 @@ export const getCasesCoordinatesHandler: RouteHandler<{
   const id = parseInt(user_id);
 
   const date_from = new Date();
+  
   const date_to = new Date();
   // add 1 day to 
   date_to.setDate(date_to.getDate() + 1)
+  
+  date_from.setHours(0,0,0,0)
+  
 
   const appointments = await req.server.prisma.appointment.findMany({
     include: {
@@ -539,29 +548,31 @@ export const getCasesCoordinatesHandler: RouteHandler<{
   const coordinates: Coordinates[] = [];
   for (const task of appointments) {
     const res = await req.server.axios.get(`geocoding/${task.Case.address}.json?key=ciIcRLdEWxdk5UYhs2Uk`)
-    .then((res) => {
-      if (!res.data.features) return;
-      const coord: number[] = res.data.features[0].geometry.coordinates;
-      if (typeof coord[0] === 'number') {
-        coordinates.push({ lng: coord[0], lat: coord[1], address: task.Case.address })
-      } else {
-        coordinates.push({ lng: coord[0][0], lat: coord[0][1], address: task.Case.address })
-      }
-    })
+      .then((res) => {
+        if (!res.data.features) return;
+        const coord: number[] = res.data.features[0].geometry.coordinates;
+        if (typeof coord[0] === 'number') {
+          coordinates.push({ lng: coord[0], lat: coord[1], address: task.Case.address })
+        } else if(typeof coord[0][0] === 'number') {
+          coordinates.push({ lng: coord[0][0], lat: coord[0][1], address: task.Case.address })
+        } else {
+          coordinates.push({ lng: coord[0][0][0], lat: coord[0][0][1], address: task.Case.address })
+        }
+      })
     console.log(`axios request`, res)
   }
 
   console.log(`coordinates`, coordinates)
   console.log(`coordinates length`, coordinates.length)
 
-  if(coordinates.length > 0) {
+  if (coordinates.length > 0) {
     reply
-        .code(200)
-        .send({ success: true, message: "Coordinates" , coordinates: coordinates });
+      .code(200)
+      .send({ success: true, message: "Coordinates", coordinates: coordinates });
   } else {
     reply
-        .code(404)
-        .send({ success: false, message: "Coordinates not found"});
+      .code(404)
+      .send({ success: false, message: "Coordinates not found" });
   }
 
 };

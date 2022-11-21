@@ -42,6 +42,7 @@ export const caseSchema = {
   properties: {
     ...{ ...caseNewSchema.properties },
     ...{ ...caseExtendSchema.properties },
+    id: { type: "number" },
     case_id: { type: "number" },
     create_time: { type: "string", format: "date-time" },
     assigned_time: { type: "string", format: "date-time" },
