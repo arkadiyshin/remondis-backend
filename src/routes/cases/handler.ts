@@ -522,9 +522,13 @@ export const getCasesCoordinatesHandler: RouteHandler<{
   const id = parseInt(user_id);
 
   const date_from = new Date();
+  
   const date_to = new Date();
   // add 1 day to 
   date_to.setDate(date_to.getDate() + 1)
+  
+  date_from.setHours(0,0,0,0)
+  
 
   const appointments = await req.server.prisma.appointment.findMany({
     include: {
