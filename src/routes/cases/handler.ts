@@ -146,6 +146,7 @@ export const changeCaseHandler: RouteHandler<{
       ...req.body,
     },
   });
+  console.log(changedCase)
   if (changedCase)
     reply
       .code(200)
