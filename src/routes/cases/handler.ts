@@ -549,8 +549,10 @@ export const getCasesCoordinatesHandler: RouteHandler<{
         const coord: number[] = res.data.features[0].geometry.coordinates;
         if (typeof coord[0] === 'number') {
           coordinates.push({ lng: coord[0], lat: coord[1], address: task.Case.address })
-        } else {
+        } else if(typeof coord[0][0] === 'number') {
           coordinates.push({ lng: coord[0][0], lat: coord[0][1], address: task.Case.address })
+        } else {
+          coordinates.push({ lng: coord[0][0][0], lat: coord[0][0][1], address: task.Case.address })
         }
       })
     console.log(`axios request`, res)
