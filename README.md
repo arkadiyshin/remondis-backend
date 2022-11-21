@@ -132,7 +132,7 @@ do not add dot(.) at the end of subject
 
 ## documentation (local)
 ### 1. Swagger: 
-* http://localhost:3000/docs/static/index.html
+* http://localhost:4000/docs/static/index.html
 * check REST API endpoints and **test it!**
 ### 2. ER diagram: 
 * https://github.com/WildCodeSchool/2022-07-EN-Berlin-Remote1-Project3Backend/blob/dev/prisma/ERD.md
