@@ -146,7 +146,6 @@ export const changeCaseHandler: RouteHandler<{
       ...req.body,
     },
   });
-  console.log(changedCase)
   if (changedCase)
     reply
       .code(200)
@@ -210,8 +209,6 @@ const hasRights = async function (
 
   const currentState = foundCase.state_id as number;
   const nextState = nextStateArg;
-  console.log(currentState);
-  console.log(nextState);
   const transition = await req.server.prisma.transition.findFirst({
     where: {
       state_id: currentState,
@@ -243,7 +240,6 @@ export const assignCaseHandler: RouteHandler<{
   const id = parseInt(req.params.case_id);
   const nextStateId = 2; // Assigned
   const transitionRights = await hasRights(nextStateId, req, reply);
-  console.log(transitionRights);
   if (transitionRights) {
     const assignedCase = await req.server.prisma.case.update({
       where: {
@@ -559,11 +555,7 @@ export const getCasesCoordinatesHandler: RouteHandler<{
           coordinates.push({ lng: coord[0][0][0], lat: coord[0][0][1], address: task.Case.address })
         }
       })
-    console.log(`axios request`, res)
   }
-
-  console.log(`coordinates`, coordinates)
-  console.log(`coordinates length`, coordinates.length)
 
   if (coordinates.length > 0) {
     reply
