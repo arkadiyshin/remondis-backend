@@ -44,7 +44,7 @@ export const getUserHandler: RouteHandler<{
     if (findUser)
         reply
             .code(200)
-            .send({ success: true, message: "User found", user: findUser });
+            .send({ success: true, message: "User found", user: {email_address: findUser.email, ...findUser} });
     else reply.code(404).send({ success: false, message: "User not found" });
 
 }
@@ -82,7 +82,6 @@ export const createUserHandler: RouteHandler<{
             username: email_address,
             confirm_link: `${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`
         });
-        console.log(`${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`)
 
         //here should be sending token by email
         const msg = {
@@ -141,7 +140,6 @@ export const updateUserHandler: RouteHandler<{
     const {user_id} = req.params;
     const id = parseInt(user_id);
 
-    console.log(req.body);
     const { username, phone, role, email_address, password } = req.body;
     
     let hash_password = '';
@@ -149,14 +147,12 @@ export const updateUserHandler: RouteHandler<{
         hash_password = await bcrypt.hash(password!, 13);
     }
 
-    //console.log(hash_password);
     let condData = {};
     condData = !role ? {...condData} : {role: role as Role};
     condData = !username ? {...condData} : {...condData, username: username};
     condData = !phone ? {...condData} : {...condData, phone: phone};
     condData = !email_address? {...condData} : {...condData, email: email_address};
     condData = !hash_password? {...condData} : {...condData, hash_password: hash_password};
-    console.log(condData);
     const updateUser = await req.server.prisma.user.update({
         where: {
             id: id
@@ -214,7 +210,6 @@ export const forgotPassHandler: RouteHandler<{
             username: userFind.username,
             confirm_link: `${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`
         });
-        console.log(`${FRONTEND_URL}/confirm?email=${email_address}&token=${token}`)
         const msg = {
             to: email_address, // Change to your recipient
             from: 'noreplay.remondis@gmail.com', // Change to your verified sender
