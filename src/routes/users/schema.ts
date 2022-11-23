@@ -27,6 +27,7 @@ export const userSchema = {
     type: "object",
     properties: {
         id: { type: "integer" },
+        state: { type: "string" },
         ...{ ...userExtendedSchema.properties },
         // state: { type: ["string", "null"] },
         // created_time: { type: "string" },

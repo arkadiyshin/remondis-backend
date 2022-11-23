@@ -543,7 +543,7 @@ export const getCasesCoordinatesHandler: RouteHandler<{
   });
   const coordinates: Coordinates[] = [];
   for (const task of appointments) {
-    const res = await req.server.axios.get(`geocoding/${task.Case.address}.json?key=ciIcRLdEWxdk5UYhs2Uk`)
+    await req.server.axios.get(`geocoding/${task.Case.address}.json?key=ciIcRLdEWxdk5UYhs2Uk`)
       .then((res) => {
         if (!res.data.features) return;
         const coord: number[] = res.data.features[0].geometry.coordinates;

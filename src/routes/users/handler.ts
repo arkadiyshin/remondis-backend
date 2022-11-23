@@ -1,7 +1,7 @@
 import { type RouteHandler } from 'fastify'
 import * as bcrypt from "bcrypt";
 import type { UserNotFound, Params, Querystring, BodyNew, BodyChange, Reply, ReplyList, BodyLogin } from './schema'
-import { Role } from '@prisma/client';
+import { Role, UserState } from '@prisma/client';
 import { FRONTEND_URL } from '../../configuration'
 
 
@@ -41,10 +41,12 @@ export const getUserHandler: RouteHandler<{
             id: id
         }
     });
-    if (findUser)
+    if (findUser) {
+        const {email, state, ...user} = findUser;
         reply
             .code(200)
-            .send({ success: true, message: "User found", user: {email_address: findUser.email, ...findUser} });
+            .send({ success: true, message: "User found", user: {email_address: email, state: state as UserState, ...user} });
+    }
     else reply.code(404).send({ success: false, message: "User not found" });
 
 }
@@ -118,8 +120,8 @@ export const confirmedUserHandler: RouteHandler<{
                 }
             })
             if (findToken?.token === token) {
-                const {token, hash_password, ...user} = findToken;
-                reply.send({ success: true, message: 'User verified', user })
+                const {token, hash_password, state, ...user} = findToken;
+                reply.send({ success: true, message: 'User verified', user: {state: state as UserState, ...user} })
             }
             else {
                 reply.send({ success: false, message: 'Invalid token' })
@@ -140,8 +142,8 @@ export const updateUserHandler: RouteHandler<{
     const {user_id} = req.params;
     const id = parseInt(user_id);
 
-    const { username, phone, role, email_address, password } = req.body;
-    
+    const { username, phone, role, email_address, password, state } = req.body;
+    console.log(req.body)
     let hash_password = '';
     if(password) {
         hash_password = await bcrypt.hash(password!, 13);
@@ -153,28 +155,20 @@ export const updateUserHandler: RouteHandler<{
     condData = !phone ? {...condData} : {...condData, phone: phone};
     condData = !email_address? {...condData} : {...condData, email: email_address};
     condData = !hash_password? {...condData} : {...condData, hash_password: hash_password};
+    condData = !state? {...condData} : {...condData, state: state as UserState};
+
     const updateUser = await req.server.prisma.user.update({
         where: {
             id: id
         },
         data: {...condData},
-        //{
-        //     ...condData,
-        //     //{...condData},
-        //     // username: username,
-        //     // email: email_address,
-        //     // hash_password: hash_password,
-        //     // phone: phone,
-            
-        //    // (role === '' ? '' : role),
-        // }
     })
 
     if (updateUser) {
-        const { hash_password, token, ...sendUser } = updateUser;
+        const { hash_password, token, state, ...sendUser } = updateUser;
         reply
             .code(200)
-            .send({ success: true, message: "User changed", user: sendUser });
+            .send({ success: true, message: "User changed", user: {state: state as UserState, ...sendUser} });
     } else {
         reply.code(404).send({ success: false, message: "User not found" });
     }
