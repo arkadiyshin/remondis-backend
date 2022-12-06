@@ -252,9 +252,6 @@ export const forgotPassSchema: FastifySchema = {
     summary: "use user email address to request to set a new password",
     description: "user forgot password",
     tags: ["user"],
-    params: {
-        ...paramsSchema
-    },
     body: {
         ...userNewSchema
     },
