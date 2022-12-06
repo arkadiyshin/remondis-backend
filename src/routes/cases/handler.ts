@@ -40,6 +40,7 @@ export const getCasesHandler: RouteHandler<{
     include: {
       State: true,
       TypeOfProperty: true,
+      Appointment: true,
     },
     where: {
       created_at: {
@@ -72,8 +73,10 @@ export const getCaseHandler: RouteHandler<{
 
   const findedCase = await req.server.prisma.case.findUnique({
     include: {
-      State: true,
-      TypeOfProperty: true,
+      // State: true,
+      // TypeOfProperty: true,
+      Appointment: true,
+      Inspector: true,
     },
     where: {
       id: id,
@@ -542,6 +545,7 @@ export const getCasesCoordinatesHandler: RouteHandler<{
     },
   });
   const coordinates: Coordinates[] = [];
+  console.log(appointments)
   for (const task of appointments) {
     await req.server.axios.get(`geocoding/${task.Case.address}.json?key=ciIcRLdEWxdk5UYhs2Uk`)
       .then((res) => {
