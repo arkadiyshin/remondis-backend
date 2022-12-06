@@ -132,13 +132,13 @@ do not add dot(.) at the end of subject
 
 ## documentation (local)
 ### 1. Swagger: 
-* http://localhost:3000/docs/static/index.html
+* http://localhost:4000/docs/static/index.html
 * check REST API endpoints and **test it!**
 ### 2. ER diagram: 
 * https://github.com/WildCodeSchool/2022-07-EN-Berlin-Remote1-Project3Backend/blob/dev/prisma/ERD.md
 * To update ER diagram after changing the model: `npx prisma migrate dev --name <model name>`
 ### 3. DB model and documentation: 
-* http://localhost:5500//prisma/docs/index.html
+* http://localhost:5500/prisma/docs/index.html
 * This documentation is aimed to help you to understand the DB Model and provide some examples how to use Prisma methods. 
 * To update DB model and documentation after model changes: `npx prisma migrate dev --name <model name>`
 ### 4. Prisma studio: 

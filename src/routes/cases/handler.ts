@@ -40,6 +40,7 @@ export const getCasesHandler: RouteHandler<{
     include: {
       State: true,
       TypeOfProperty: true,
+      Appointment: true,
     },
     where: {
       created_at: {
@@ -72,8 +73,10 @@ export const getCaseHandler: RouteHandler<{
 
   const findedCase = await req.server.prisma.case.findUnique({
     include: {
-      State: true,
-      TypeOfProperty: true,
+      // State: true,
+      // TypeOfProperty: true,
+      Appointment: true,
+      Inspector: true,
     },
     where: {
       id: id,
@@ -209,8 +212,6 @@ const hasRights = async function (
 
   const currentState = foundCase.state_id as number;
   const nextState = nextStateArg;
-  console.log(currentState);
-  console.log(nextState);
   const transition = await req.server.prisma.transition.findFirst({
     where: {
       state_id: currentState,
@@ -242,7 +243,6 @@ export const assignCaseHandler: RouteHandler<{
   const id = parseInt(req.params.case_id);
   const nextStateId = 2; // Assigned
   const transitionRights = await hasRights(nextStateId, req, reply);
-  console.log(transitionRights);
   if (transitionRights) {
     const assignedCase = await req.server.prisma.case.update({
       where: {
@@ -470,13 +470,17 @@ export const getCasesToDoHandler: RouteHandler<{
                     : INSPECTOR_TODO_STATES,
               },
             },
-            { AND: [{ state_id: STATE_ONGOING.id }, { Appointment: null }] },
             {
-              AND: [
-                { state_id: STATE_ONGOING.id },
-                { Appointment: { is: { date: { lte: new Date() } } } },
-              ],
-            },
+              OR: [
+                { AND: [{ state_id: STATE_ONGOING.id }, { Appointment: null }] },
+                {
+                  AND: [
+                    { state_id: STATE_ONGOING.id },
+                    { Appointment: { is: { date: { lte: new Date() } } } },
+                  ],
+                },
+              ]
+            }
           ],
         },
       ],
@@ -517,9 +521,13 @@ export const getCasesCoordinatesHandler: RouteHandler<{
   const id = parseInt(user_id);
 
   const date_from = new Date();
+  
   const date_to = new Date();
   // add 1 day to 
   date_to.setDate(date_to.getDate() + 1)
+  
+  date_from.setHours(0,0,0,0)
+  
 
   const appointments = await req.server.prisma.appointment.findMany({
     include: {
@@ -537,31 +545,30 @@ export const getCasesCoordinatesHandler: RouteHandler<{
     },
   });
   const coordinates: Coordinates[] = [];
+  console.log(appointments)
   for (const task of appointments) {
-    const res = await req.server.axios.get(`geocoding/${task.Case.address}.json?key=ciIcRLdEWxdk5UYhs2Uk`)
-    .then((res) => {
-      if (!res.data.features) return;
-      const coord: number[] = res.data.features[0].geometry.coordinates;
-      if (typeof coord[0] === 'number') {
-        coordinates.push({ lng: coord[0], lat: coord[1], address: task.Case.address })
-      } else {
-        coordinates.push({ lng: coord[0][0], lat: coord[0][1], address: task.Case.address })
-      }
-    })
-    console.log(`axios request`, res)
+    await req.server.axios.get(`geocoding/${task.Case.address}.json?key=ciIcRLdEWxdk5UYhs2Uk`)
+      .then((res) => {
+        if (!res.data.features) return;
+        const coord: number[] = res.data.features[0].geometry.coordinates;
+        if (typeof coord[0] === 'number') {
+          coordinates.push({ lng: coord[0], lat: coord[1], address: task.Case.address })
+        } else if(typeof coord[0][0] === 'number') {
+          coordinates.push({ lng: coord[0][0], lat: coord[0][1], address: task.Case.address })
+        } else {
+          coordinates.push({ lng: coord[0][0][0], lat: coord[0][0][1], address: task.Case.address })
+        }
+      })
   }
 
-  console.log(`coordinates`, coordinates)
-  console.log(`coordinates length`, coordinates.length)
-
-  if(coordinates.length > 0) {
+  if (coordinates.length > 0) {
     reply
-        .code(200)
-        .send({ success: true, message: "Coordinates" , coordinates: coordinates });
+      .code(200)
+      .send({ success: true, message: "Coordinates", coordinates: coordinates });
   } else {
     reply
-        .code(404)
-        .send({ success: false, message: "Coordinates not found"});
+      .code(404)
+      .send({ success: false, message: "Coordinates not found" });
   }
 
 };

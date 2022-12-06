@@ -19,20 +19,3 @@ const sendgridPlugin: FastifyPluginAsync = fp(async (server, options) => {
 })
 
 export default sendgridPlugin
-
-/**
- * Example 
-const msg = {
-    to: 'test@test.com', // Change to your recipient
-    from: 'noreplay.remondis@gmail.com', // Change to your verified sender
-    subject: 'confirm email',
-    text: 'url with token',
-    html: '<strong>url with token</strong>',
-}
-try {
-    const result = await sgMail.send(msg);
-    console.log('Email sended')
-} catch (error) {
-    console.log('Email not sended')
-}
- */

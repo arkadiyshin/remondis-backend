@@ -1,5 +1,7 @@
 import type { FastifySchema } from "fastify";
 import { FromSchema } from "json-schema-to-ts";
+import { appointmentSchema } from "../appointments/schema";
+import { userSchema } from "../users/schema";
 
 export const caseNewSchema = {
   $id: "caseNew",
@@ -42,18 +44,22 @@ export const caseSchema = {
   properties: {
     ...{ ...caseNewSchema.properties },
     ...{ ...caseExtendSchema.properties },
+    id: { type: "number" },
     case_id: { type: "number" },
     create_time: { type: "string", format: "date-time" },
     assigned_time: { type: "string", format: "date-time" },
     confirmed_time: { type: "string", format: "date-time" },
     state_id: { type: ["integer", "null"] },
-    state: { type: "string" },
+    //state: { type: "string" },
     inspector_id: { type: ["integer", "null"] },
-    inspector: { type: ["string", "null"] },
+    //inspector: { type: ["string", "null"] },
     manager_id: { type: ["integer", "null"] },
     manager: { type: ["string", "null"] },
     message: { type: ["string"] },
     action: { type: ["string"] },
+    Appointment: { type: ["object", "null"], properties: appointmentSchema.properties },
+    Inspector: { type: ["object", "null"], properties: userSchema.properties },
+
   },
 } as const;
 
@@ -170,7 +176,24 @@ export type BodyStatus = FromSchema<typeof caseStatusSchema>;
 export type Coordinates = FromSchema<typeof caseCoordinatesSchema>;
 export type Reply = FromSchema<
   typeof replySchema,
-  { references: [typeof caseSchema] }
+  {
+    references: [typeof caseSchema], deserialize: [
+      {
+        pattern: {
+          type: "string";
+          format: "date";
+        };
+        output: Date;
+      },
+      {
+        pattern: {
+          type: "string";
+          format: "date-time";
+        };
+        output: Date;
+      }
+    ];
+  }
 >;
 export type ReplyList = FromSchema<
   typeof replyListSchema,
@@ -188,15 +211,15 @@ export const getCasesSchema: FastifySchema = {
     "Get list of cases filtered by: data ceration, state, inspector, manager",
   tags: ["case"],
   querystring: {
-      date_from: { type: ["string", "null"], format: "date-time" },
-      date_to: { type: ["string", "null"], format: "date-time" },
-      state_id: { type: ["integer", "null"] },
-      state: { type: ["string", "null"] },
-      inspector_id: { type: "integer" },
-      inspector: { type: "string" },
-      manager_id: { type: "integer" },
-      manager: { type: "string" },
-    },
+    date_from: { type: ["string", "null"], format: "date-time" },
+    date_to: { type: ["string", "null"], format: "date-time" },
+    state_id: { type: ["integer", "null"] },
+    state: { type: ["string", "null"] },
+    inspector_id: { type: "integer" },
+    inspector: { type: "string" },
+    manager_id: { type: "integer" },
+    manager: { type: "string" },
+  },
   response: {
     200: {
       ...replyListSchema,
