@@ -35,6 +35,23 @@ export const getUsersHandler: RouteHandler<{
   reply.send({ success: true, message: "List of users", users: userList });
 };
 
+export const getUserByEmail: RouteHandler<{
+  Body: BodyNew;
+  Reply: Reply;
+}> = async function (req, reply) {
+  const { email_address } = req.body;
+  const foundUser = await req.server.prisma.user.findFirst({
+    where: {
+      email: email_address,
+    },
+  });
+  reply.send({
+    success: true,
+    message: "User Id found",
+    user: { ...foundUser },
+  });
+};
+
 export const getUserHandler: RouteHandler<{
   Params: Params;
   Reply: Reply | UserNotFound;
