@@ -39,6 +39,6 @@ export default async (app: FastifyInstance) => {
     app.delete('/:room', { schema: deleteCaseItemSchema }, deleteCaseItemHandler)
 
     app.post('/:room/photos', { schema: postCasePhotoSchema }, addCasePhotoHandler)
-    app.put('/:room/photos/:photo_id', { schema: updateCasePhotoSchema }, updateCasePhotoHandler)
+    app.put('/:room/photos', { schema: updateCasePhotoSchema }, updateCasePhotoHandler)
     app.delete('/:room/photos/:photo_id', { schema: deleteCasePhotoSchema }, deleteCasePhotoHandler)
 }
