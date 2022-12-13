@@ -62,7 +62,7 @@ model Case {
   squaremeters        Float           @default(0)
   quantity            Int             @default(0)
   way_to_property     String?         @default("")
-  type_of_property_id Int?
+  type_of_property_id Int?            @default(1)
   TypeOfProperty      TypeOfProperty? @relation(fields: [type_of_property_id], references: [id])
   state_id            Int?
   State               CaseState?      @relation(fields: [state_id], references: [id])

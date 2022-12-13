@@ -73,8 +73,8 @@ export const getCaseHandler: RouteHandler<{
 
   const findedCase = await req.server.prisma.case.findUnique({
     include: {
-      // State: true,
-      // TypeOfProperty: true,
+      State: true,
+      TypeOfProperty: true,
       Appointment: true,
       Inspector: true,
     },
@@ -487,6 +487,8 @@ export const getCasesToDoHandler: RouteHandler<{
     },
     include: {
       Appointment: true,
+      State: true,
+      TypeOfProperty: true,
     },
   });
 
