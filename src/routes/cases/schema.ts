@@ -10,6 +10,7 @@ export const caseNewSchema = {
     client_phone: { type: "string" },
     client_email: { type: "string", format: "email" },
     address: { type: "string" },
+    manager_id: { type: ["integer", "null"] },
   },
   required: ["client_email", "address"],
 } as const;
@@ -52,8 +53,7 @@ export const caseSchema = {
     state_id: { type: ["integer", "null"] },
     //state: { type: "string" },
     inspector_id: { type: ["integer", "null"] },
-    //inspector: { type: ["string", "null"] },
-    manager_id: { type: ["integer", "null"] },
+    //inspector: { type: ["string", "null"] },    
     manager: { type: ["string", "null"] },
     message: { type: ["string"] },
     action: { type: ["string"] },
