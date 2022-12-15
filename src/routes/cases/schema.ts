@@ -60,6 +60,7 @@ export const caseSchema = {
     Appointment: { type: ["object", "null"], properties: appointmentSchema.properties },
     Inspector: { type: ["object", "null"], properties: userSchema.properties },
     State: { type: ["object", "null"], properties: {id: {type: "integer"} , title: {type: "string"} } },
+    TypeOfProperty: { type: ["object", "null"], properties: {id: {type: "integer"} , title: {type: "string"} } },
 
   },
 } as const;
