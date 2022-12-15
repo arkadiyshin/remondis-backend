@@ -119,7 +119,7 @@ model CasePhoto {
   case_id   Int
   Case      Case     @relation(fields: [case_id], references: [id])
   room      Int      @default(0)
-  CaseItem  CaseItem @relation(fields: [case_id, room], references: [case_id, room])
+  CaseItem  CaseItem @relation(fields: [case_id, room], references: [case_id, room], onDelete: Cascade)
   photo     Bytes
   file_name String   @db.VarChar(255)
 }
