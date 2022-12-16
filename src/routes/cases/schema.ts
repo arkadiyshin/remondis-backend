@@ -12,6 +12,9 @@ export const caseNewSchema = {
     address: { type: "string" },
     manager_id: { type: ["integer", "null"] },
   },
+
+
+
   required: ["client_email", "address"],
 } as const;
 
