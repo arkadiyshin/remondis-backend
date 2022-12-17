@@ -6,8 +6,28 @@ export const getAppointmentsHandler: RouteHandler<{
     Querystring: Querystring
     Reply: ReplyList
 }> = async function (req, reply) {
+    const {
+        date_from,
+        date_to,
+        inspector_id,
+        case_id,
+    } = req.query;
 
-    const appointment = await req.server.prisma.appointment.findMany();
+    const appointment = await req.server.prisma.appointment.findMany({
+        include: {
+            Case: true,
+        },
+        where: {
+            date: {
+                gte: date_from,
+                lte: date_to,
+            },
+            Case: {
+                id: case_id,
+                inspector_id: inspector_id,
+            }
+        },
+    });
     reply.code(200).send({ success: true, message: 'List of appointments', appointments: appointment });
 }
 
@@ -39,8 +59,8 @@ export const postAppointmentByCaseHandler: RouteHandler<{
 
     const { case_id } = req.params;
     const { date, time_from, time_to } = req.body
-    
-    if(!date || !time_from || !time_to) {
+
+    if (!date || !time_from || !time_to) {
         reply.code(404).send({ success: false, message: 'Appoinment not found' })
         return;
     }

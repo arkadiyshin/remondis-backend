@@ -40,6 +40,7 @@ export const getCasesHandler: RouteHandler<{
     include: {
       State: true,
       TypeOfProperty: true,
+      Appointment: true,
     },
     where: {
       created_at: {
@@ -74,6 +75,8 @@ export const getCaseHandler: RouteHandler<{
     include: {
       State: true,
       TypeOfProperty: true,
+      Appointment: true,
+      Inspector: true,
     },
     where: {
       id: id,
@@ -146,7 +149,6 @@ export const changeCaseHandler: RouteHandler<{
       ...req.body,
     },
   });
-  console.log(changedCase)
   if (changedCase)
     reply
       .code(200)
@@ -210,8 +212,6 @@ const hasRights = async function (
 
   const currentState = foundCase.state_id as number;
   const nextState = nextStateArg;
-  console.log(currentState);
-  console.log(nextState);
   const transition = await req.server.prisma.transition.findFirst({
     where: {
       state_id: currentState,
@@ -243,7 +243,6 @@ export const assignCaseHandler: RouteHandler<{
   const id = parseInt(req.params.case_id);
   const nextStateId = 2; // Assigned
   const transitionRights = await hasRights(nextStateId, req, reply);
-  console.log(transitionRights);
   if (transitionRights) {
     const assignedCase = await req.server.prisma.case.update({
       where: {
@@ -488,6 +487,8 @@ export const getCasesToDoHandler: RouteHandler<{
     },
     include: {
       Appointment: true,
+      State: true,
+      TypeOfProperty: true,
     },
   });
 
@@ -546,8 +547,9 @@ export const getCasesCoordinatesHandler: RouteHandler<{
     },
   });
   const coordinates: Coordinates[] = [];
+  console.log(appointments)
   for (const task of appointments) {
-    const res = await req.server.axios.get(`geocoding/${task.Case.address}.json?key=ciIcRLdEWxdk5UYhs2Uk`)
+    await req.server.axios.get(`geocoding/${task.Case.address}.json?key=ciIcRLdEWxdk5UYhs2Uk`)
       .then((res) => {
         if (!res.data.features) return;
         const coord: number[] = res.data.features[0].geometry.coordinates;
@@ -559,11 +561,7 @@ export const getCasesCoordinatesHandler: RouteHandler<{
           coordinates.push({ lng: coord[0][0][0], lat: coord[0][0][1], address: task.Case.address })
         }
       })
-    console.log(`axios request`, res)
   }
-
-  console.log(`coordinates`, coordinates)
-  console.log(`coordinates length`, coordinates.length)
 
   if (coordinates.length > 0) {
     reply

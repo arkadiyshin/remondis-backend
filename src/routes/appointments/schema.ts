@@ -37,7 +37,8 @@ const paramsSchema = {
 const querystringSchema = {
     type: 'object',
     properties: {
-        case_id: { type: "string" },
+        case_id: { type: "integer" },
+        inspector_id: { type: "integer" },
         date_from: { type: "string"},
         date_to: { type: "string"},
     },
