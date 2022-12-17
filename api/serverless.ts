@@ -35,19 +35,19 @@ server.register(import("../src/app.js"), {} );
 /* import * as dotenv from "dotenv";
 dotenv.config(); */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import app from "../src/app.js"
-//import Fastify from "fastify";
+//import app from "../src/app.js"
+import Fastify from "fastify";
 
 // Instantiate Fastify with some config
-/* const server = Fastify({
+const server = Fastify({
   logger: true,
-}); */
+});
 
 
 export default async function (req: VercelRequest, res: VercelResponse) {
   //await server.ready();
   
-  res.send(typeof app);
+  res.send(typeof server);
   /* const { name = 'World' } = req.query;
   res.send(`Hello ${name}!`); */
   //server.server.emit('request', req, res);
