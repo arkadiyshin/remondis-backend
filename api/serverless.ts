@@ -42,6 +42,7 @@ import Fastify from "fastify";
 const app = Fastify({
   logger: true,
 });
+app.register(import("../src/app.js"));
 
 export default async function (req: VercelRequest, res: VercelResponse) {
   //await server.ready();
