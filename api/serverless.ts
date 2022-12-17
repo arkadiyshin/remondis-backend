@@ -47,7 +47,7 @@ const server = Fastify({
 server.register(app);
 
 export default async function (req: VercelRequest, res: VercelResponse) {
-  await server.ready();
+  //await server.ready();
   //server.register(app);
   //await server.ready()
   res.send('done');
