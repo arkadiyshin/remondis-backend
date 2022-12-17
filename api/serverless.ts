@@ -19,10 +19,23 @@ export default async (req, res) => {
     await app.ready();
     app.server.emit('request', req, res);
 } */
+import * as dotenv from "dotenv";
+dotenv.config();
+import Fastify, { FastifyInstance } from "fastify";
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default function (req: VercelRequest, res: VercelResponse) {
+const server: FastifyInstance = Fastify({
+  logger: true,
+});
+
+server.register(import("../dist/app.js"), {} );
+
+export default async function (req: VercelRequest, res: VercelResponse) {
+  await server.ready();
   const { name = 'World' } = req.query;
   res.send(`Hello ${name}!`);
+  //server.server.emit('request', req, res);
+  /* const { name = 'World' } = req.query;
+  res.send(`Hello ${name}!`); */
 }
