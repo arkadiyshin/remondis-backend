@@ -32,6 +32,8 @@ const server: FastifyInstance = Fastify({
 
 server.register(import("../src/app.js"), {} );
  */
+import * as dotenv from "dotenv";
+dotenv.config();
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function (req: VercelRequest, res: VercelResponse) {
