@@ -37,6 +37,15 @@ export const getCasesHandler: RouteHandler<{
   } = req.query;
 
   const cases = await req.server.prisma.case.findMany({
+    orderBy: [
+      {
+        created_at: 'asc',
+      },
+      {
+        id: 'asc',
+      }
+    ],
+
     include: {
       State: true,
       TypeOfProperty: true,
