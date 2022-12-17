@@ -29,7 +29,7 @@ const server: FastifyInstance = Fastify({
   logger: true,
 });
 
-server.register(import("../dist/app.js"), {} );
+server.register(import("../src/app.js"), {} );
 
 export default async function (req: VercelRequest, res: VercelResponse) {
   await server.ready();
