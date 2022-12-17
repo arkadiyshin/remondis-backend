@@ -66,13 +66,22 @@ export const postAppointmentByCaseHandler: RouteHandler<{
     }
 
     const id = parseInt(case_id)
-    const postAppointment = await req.server.prisma.appointment.create({
-        data: {
+    const postAppointment = await req.server.prisma.appointment.upsert({
+        create: {
             case_id: id,
             date: date,
             time_from: time_from,
             time_to: time_to,
-        }
+        },
+        update: {
+            case_id: id,
+            date: date,
+            time_from: time_from,
+            time_to: time_to,
+        },
+        where: {
+            case_id: id,
+          },
     })
     if (postAppointment)
         reply.code(200).send({ success: true, message: 'Appoinment created', appointment: postAppointment })
