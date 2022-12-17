@@ -1,4 +1,5 @@
-/* "use strict";
+"use strict";
+
 
 // Read the .env file.
 import * as dotenv from "dotenv";
@@ -13,13 +14,13 @@ const app = Fastify({
 });
 
 // Register your application as a normal plugin.
-app.register(import("../app.js"));
+app.register(import("../src/app.js"));
 
 export default async (req, res) => {
     await app.ready();
     app.server.emit('request', req, res);
-} */
-import * as dotenv from "dotenv";
+}
+/* import * as dotenv from "dotenv";
 dotenv.config();
 import Fastify, { FastifyInstance } from "fastify";
 
@@ -37,5 +38,5 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   res.send(`Hello ${name}!`);
   //server.server.emit('request', req, res);
   /* const { name = 'World' } = req.query;
-  res.send(`Hello ${name}!`); */
-}
+  res.send(`Hello ${name}!`);
+} */
