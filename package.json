@@ -61,6 +61,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/node": "^18.8.5",
     "@types/nodemailer": "^6.4.6",
+    "@vercel/node": "^2.8.1",
     "commitizen": "^4.2.5",
     "concurrently": "^7.5.0",
     "cz-conventional-changelog": "^3.3.0",
