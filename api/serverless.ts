@@ -36,6 +36,13 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
+import Fastify from "fastify";
+
+// Instantiate Fastify with some config
+const app = Fastify({
+  logger: true,
+});
+
 export default async function (req: VercelRequest, res: VercelResponse) {
   //await server.ready();
   const { name = 'World' } = req.query;
