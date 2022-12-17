@@ -32,7 +32,7 @@ const server: FastifyInstance = Fastify({
 server.register(import("../src/app.js"), {} );
 
 export default async function (req: VercelRequest, res: VercelResponse) {
-  await server.ready();
+  //await server.ready();
   const { name = 'World' } = req.query;
   res.send(`Hello ${name}!`);
   //server.server.emit('request', req, res);
