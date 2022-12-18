@@ -1,7 +1,8 @@
 .env
 docs/
 prisma/docs/
-
+test
+prisma
 # Logs
 logs
 *.log
