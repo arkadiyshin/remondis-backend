@@ -21,7 +21,9 @@
             "appointment",
             "email",
             "model",
-            "api"
+            "api",
+            "vercel",
+            "glitch"
         ],
         "validate": true,
         "multiple": false
