@@ -1,22 +1,22 @@
 {
    "extends": "fastify-tsconfig",
    "compilerOptions": {
-      "outDir": "dist/src",
-      "sourceMap": true
+      "outDir": "dist",
+      "sourceMap": false
    },
-   "typedocOptions": {
-      "entryPoints": [
-         "src/"
-      ],
-      "out": "docs",
-      "entryPointStrategy": "Expand",
-      "plugin": [
-         "typedoc-theme-hierarchy"
-      ],
-      "theme": "hierarchy",
-      "name": "Remondis backend"
-   },
-   "include": [
-      "src/**/*.ts"
-   ]
+   // "typedocOptions": {
+   //    "entryPoints": [
+   //       "src/"
+   //    ],
+   //    "out": "docs",
+   //    "entryPointStrategy": "Expand",
+   //    "plugin": [
+   //       "typedoc-theme-hierarchy"
+   //    ],
+   //    "theme": "hierarchy",
+   //    "name": "Remondis backend"
+   // },
+   // "include": [
+   //    "src/**/*.ts"
+   // ] 
 }
