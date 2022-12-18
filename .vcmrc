@@ -22,7 +22,8 @@
             "email",
             "model",
             "api",
-            "vercel"
+            "vercel",
+            "glitch"
         ],
         "validate": true,
         "multiple": false
